@@ -1,66 +1,84 @@
 # Product Brief: EuroBonus Poeng-stacker
 
-## Hva
+> Revidert 2026-11-11 etter tilbakemelding fra faglærer (2026-10-06). Strukturert etter malen. Detaljerte satser og regler ligger i [`docs/vedlegg-satser.md`](docs/vedlegg-satser.md). Kravene er videreført i [`docs/prd.md`](docs/prd.md).
 
-EuroBonus Poeng-stacker er en applikasjon som hjelper SAS EuroBonus-medlemmer med å holde oversikt over og maksimere poengopptjening på tvers av flere, ofte overlappende kilder samtidig: dagligvarehandel via Trumf (automatisk overføring til EuroBonus), betalingskort (SAS-tilknyttede kort med ulik poengverdi og -type — American Express og SAS EuroBonus Mastercard gir både bonuspoeng og nivåpoeng, mens Lunar sitt SAS-tilknyttede debetkort kun gir bonuspoeng — 8 poeng per 100 kr på alle kjøp, uten krav om kredittvurdering, men lett å overse siden folk ikke forventer at et debetkort gir lojalitetspoeng), EuroBonus-partnerbutikker (f.eks. Rituals), hvor poeng registreres automatisk via det tilknyttede kortet — ofte til en betydelig høyere sats enn kortets normale opptjening (brukererfaring: 65 bonuspoeng på et kjøp på 129 kr, altså rundt 50 poeng per 100 kr), regningsbetalingstjenester (BillKill/Betalo), flyreiser, og SAS' miljøprogram **ChangeMakers** (opptil 5000 nivåpoeng årlig ved å fullføre 10 steg).
+## Sammendrag
 
-Appen skiller mellom to separate poengtyper som i dag lett forveksles:
-- **Bonuspoeng** — brukes til å løse inn premier (flyreiser, hotell, oppgraderinger)
-- **Nivåpoeng** — brukes til å oppnå og beholde medlemsnivå (Basic → Silver → Gold → Diamond)
+EuroBonus Poeng-stacker regner ut hvor mange **bonuspoeng** og **nivåpoeng** et kjøp gir for et SAS EuroBonus-medlem, fordelt på kilde (Trumf, betalingskort, partnerbutikk, m.fl.). Brukeren beskriver kjøpet med vanlige ord, appen tolker det, og viser stablingen ("dobbel-/trippeldipping") tydelig: hvor mye kommer fra hva.
 
-Kjernefunksjonaliteten er en KI-drevet innlesing: brukeren beskriver et kjøp i fritekst (f.eks. "Handlet for 450 kr på Kiwi, betalte med SAS American Express") eller laster opp et bilde av en kvittering, og en språkmodell tolker dette og fyller ut beregningen automatisk — i stedet for at brukeren må taste inn hvert felt manuelt i et skjema. Ved kvitteringstolkning skal KI-agenten også gjenkjenne hvilket kortnettverk som er brukt (Mastercard, American Express eller Visa) direkte fra kvitteringen, siden dette avgjør hvilke poengsatser som gjelder.
+## Problemet
 
-Appen er bygget rundt at mange bevisst **"dobbeldipper" eller "trippeldipper"** — altså kombinerer flere lojalitetsprogrammer på ett og samme kjøp (f.eks. Trumf-overføring *og* kortpoeng *og* eventuelt en regningsbetalingstjeneste samtidig). Å synliggjøre denne stablingen tydelig er selve kjerneverdien i appen, fremfor bare å vise ett tall.
+SAS EuroBonus-medlemmer som bevisst velger hvordan de betaler, må i dag sjekke 2–3 apper (SAS, American Express, Trumf), huske ulike satser per korttype og regne ut summen selv. Reglene er spredt og vanskelige å holde i hodet:
 
-I tillegg til bonuspoeng og nivåpoeng finnes en tredje belønningstype: **terskelbaserte fordeler**, som låses opp ved et gitt årlig kortforbruk fremfor akkumulerte poeng — f.eks. American Express' **Companion Ticket** (2-for-1-billett ved 100 000–300 000 kr årlig forbruk, avhengig av kortnivå) og Mastercard Premiums **FlyPremium** (oppgradering til Premium/Business på bonusreiser). Appen bør vise fremgang mot disse tersklene også.
+- Bonuspoeng (til premier) og nivåpoeng (til medlemsnivå) forveksles lett.
+- SAS Amex Elite gir 20 bonuspoeng + 6 nivåpoeng per 100 kr, standard SAS EuroBonus Mastercard 10 bonuspoeng og ingen nivåpoeng. Lunar-debetkortet gir kun bonuspoeng og overses ofte fordi folk ikke venter lojalitetspoeng fra et debetkort.
+- Partnerbutikker (f.eks. Rituals) kan gi mye høyere sats enn kortets vanlige, uten at det synes i kassen (observert: 65 bonuspoeng på 129 kr).
+- **ChangeMakers-eksempelet:** EuroBonus' kvalifiseringsperiode følger ikke kalenderåret, mens ChangeMakers nullstilles ved nyttår. Man kan derfor fullføre de 10 stegene to ganger innenfor én kvalifiseringsperiode og få 10 000 i stedet for 5 000 nivåpoeng. Det er nesten umulig å oppdage uten å sammenligne datoer i to programmer.
 
-I tillegg til å beregne opptjente poeng, inneholder appen en **nivåpoeng-veiviser**: basert på hvilke betalingskort brukeren faktisk har tilgang til (ikke alle kvalifiserer for f.eks. American Express Elite), foreslår appen den enkleste veien til ønsket medlemsnivå — enten det innebærer å endre betalingsvaner med eksisterende kort, eller å vurdere et nytt kort brukeren kan søke på.
+Dette rammer reisende som bruker SAS aktivt og taper poeng eller status fordi opptjeningsreglene ikke snakker sammen.
 
-## Hvorfor
+## Løsningen (brukeropplevelsen)
 
-**Ren sporing er ikke nytt, og heller ikke ren informasjon.** SAS-appen viser allerede bonuspoeng og nivåpoeng fordelt på kilde, American Express-appen viser fremgang mot Companion Ticket, og grundige community-ressurser som eurobonusguiden.no dokumenterer reglene i detalj. Men ingen av disse løser det egentlige problemet: brukeren må fortsatt selv *lese* seg opp, *forstå* reglene, og *regne ut* summen manuelt på tvers av kilder. Skulle EuroBonus Poeng-stacker bare gjenskape informasjonen som allerede finnes, ville den ikke ha noen grunn til å eksistere — verdien ligger i at appen gjør utregningen for deg, ikke i at den samler enda mer å lese.
+1. Brukeren legger inn kort hen har (én gang).
+2. Hen skriver et kjøp i fritekst, f.eks. «Handlet for 450 kr på Kiwi, betalte med SAS American Express».
+3. Appen foreslår en tolkning (beløp, butikk, kort, dato). Brukeren bekrefter eller retter, og lagrer ikke før hen har bekreftet.
+4. Appen viser **hva kjøpet ga**, delt på kilde og på poengtype: for eksempel Trumf X, kort Y, totalt Z bonuspoeng og W nivåpoeng.
+5. Forsiden viser **samlet status**: bonuspoeng og nivåpoeng totalt, med kjøpshistorikk.
 
-Det disse appene *ikke* gjør, er å snakke sammen. Brukeren må selv sjekke 2–3 apper, huske ulike satser per korttype (f.eks. SAS American Express Elite gir 20 bonuspoeng + 6 nivåpoeng per 100 kr, mens standard SAS EuroBonus Mastercard gir 10 bonuspoeng og ingen nivåpoeng), og manuelt regne ut hvilken kombinasjon av butikk og betalingsmåte som faktisk lønner seg. Den reelle verdien i EuroBonus Poeng-stacker ligger derfor i to ting ingen enkeltapp tilbyr i dag:
-1. **Aggregering** — alle kilder samlet ett sted, i stedet for manuell sammenstilling på tvers av apper
-2. **Handlingsrettede anbefalinger** — konkrete forslag som "bruk kort X i butikk Y for flest poeng", noe ingen enkeltapp kan gi siden hver av dem kun kjenner sin egen del av bildet
+Designprinsipp: kompleksiteten ligger i regelmotoren, ikke i grensesnittet. Brukeren møter én samlet oversikt, ikke et skjema med mange felter. Registrering skal også virke **uten KI** (manuelt skjema), slik at appen kan kjøres av andre uten LLM-nøkkel.
 
-Et konkret eksempel på hvorfor dette er vanskelig å se selv: EuroBonus' kvalifiseringsperiode for medlemsnivå følger *ikke* kalenderåret, mens ChangeMakers-programmet nullstilles *ved* nyttår. Det betyr at man i praksis kan fullføre ChangeMakers sine 10 steg to ganger innenfor én og samme kvalifiseringsperiode (én gang før og én gang etter årsskiftet) og dermed tjene 10 000 nivåpoeng i stedet for 5 000 — noe som er nesten umulig å oppdage uten å aktivt sammenligne datoene i to forskjellige programmer. Dette er nøyaktig den typen anbefaling appen skal kunne gi automatisk.
+## Hva gjør dette annerledes
 
-Dette rammer særlig reisende som bruker SAS aktivt og ønsker å ta bevisste valg om hvor og hvordan de betaler, men som i dag taper potensielle poeng eller status fordi opptjeningsreglene er spredt over flere apper og vanskelige å holde i hodet samtidig.
+SAS-appen, Amex-appen og eurobonusguiden.no finnes allerede. Ren sporing eller ren informasjon er ikke nytt. Verdien er det ingen av dem gjør:
 
-## Hvem
+1. **Aggregering:** alle kilder og begge poengtyper på ett kjøp, på ett sted.
+2. **Utregning for brukeren:** appen leser reglene og regner, i stedet for at brukeren leser seg opp.
+3. **Senere:** handlingsrettede anbefalinger («bruk kort X i butikk Y»), som ingen enkeltapp kan gi fordi hver kun kjenner sin del.
 
-Primær målgruppe: nordmenn med aktivt SAS EuroBonus-medlemskap som reiser jevnlig og/eller bevisst bruker SAS-tilknyttede betalingsløsninger (kort, Trumf) i hverdagen. Typisk bruker er interessert i å nå et konkret mål — enten en premiereise (bonuspoeng) eller neste medlemsnivå (nivåpoeng) — og ønsker verktøy for å ta informerte valg fremfor å regne manuelt.
+## Hvem dette er for
 
-## Hvordan
+Nordmenn med aktivt SAS EuroBonus-medlemskap som reiser jevnlig og/eller bevisst bruker SAS-tilknyttede betalingsløsninger (kort, Trumf) i hverdagen. Typisk mål: en premiereise (bonuspoeng) eller neste medlemsnivå (nivåpoeng), og å ta informerte valg uten å regne manuelt.
 
-**Kjernefunksjoner (MVP):**
-- Registrering av kjøp via fritekst eller kvitteringsbilde, tolket av en KI-modell
-- Brukerprofil med hvilke betalingskort brukeren faktisk har (ikke alle kort er tilgjengelige for alle, f.eks. pga. inntektskrav eller årsavgift)
-- Regelmotor som beregner bonuspoeng og nivåpoeng separat, basert på konfigurerbare satser per kilde (Trumf, kort-type, partnerbutikker, BillKill/Betalo, flyreise, ChangeMakers)
-- ChangeMakers-sporing: registrerer fullførte steg og varsler bruker om mulighet til å fullføre programmet to ganger innenfor én kvalifiseringsperiode, siden nullstillingssyklusene ikke er synkronisert
-- Lagring av kjøps-/reisehistorikk per bruker, med innlogging
-- Fremgangsvisning mot et bonuspoeng-mål (f.eks. en drømmereise), mot neste medlemsnivå, og mot årlige forbrukterskler for Companion Ticket / FlyPremium
-- Nivåpoeng-veiviser: foreslår enkleste vei til ønsket medlemsnivå basert på brukerens tilgjengelige kort og kjøpsmønster
-- KI-genererte anbefalinger for hvilken betalingsmåte/butikk som gir mest poeng ved fremtidige kjøp
+## Suksesskriterier
 
-**Designprinsipp:** kompleksiteten skal ligge i regelmotoren, ikke i grensesnittet. Brukeren skal møte én samlet oversikt (status på tvers av alle kilder og alle tre belønningstyper) og én klar anbefaling — ikke et skjema med mange felter å forstå. Detaljene (satser, kilder, terskler) skal ligge bak, håndtert av KI-tolkning og regelmotor, ikke eksponeres som noe brukeren må sette seg inn i.
+Kriteriene kan testes. Forventede verdier regnes ut for hånd og kontrolleres mot offisielle kilder **før** regelmotoren bygges (se [`docs/vedlegg-satser.md`](docs/vedlegg-satser.md), testtabellen).
 
-**Tekniske valg:**
-- Satser lagres som konfigurerbare verdier (ikke hardkodet), siden kortutstedere og Trumf endrer vilkårene over tid
-- Bygges med verktøykjeden fra kurset: Claude Code som utviklingsagent, database/autentisering via Supabase
-- **Fullstack, kjørbar lokalt via Docker** — ingen krav om publisering. Leveres som kildekode + Dockerfile, i tråd med emnets innleveringskrav. Hosting til en gratis plattform (f.eks. Vercel/Netlify + en container-host) vurderes som en valgfri utvidelse, ikke en forutsetning for godkjenning
+1. Regelmotoren gir riktig bonuspoeng og nivåpoeng, fordelt på kilde, for alle 10–15 kjøpene i testtabellen. Eksempel: 450 kr på Kiwi med SAS Amex Elite gir 90 bonuspoeng og 27 nivåpoeng fra kortet (20 og 6 per 100 kr, avrundingsregel avklares), pluss Trumf-poeng.
+2. Fritekst som «450 kr Kiwi SAS Amex» gir riktig tolket kjøp i minst 8 av 10 testsetninger; usikre felt vises for bekreftelse i stedet for å gjettes.
+3. Ingenting lagres uten at brukeren har bekreftet tolkningen.
+4. Bonuspoeng og nivåpoeng vises og summeres alltid hver for seg.
+5. Appen starter lokalt med `docker compose up` (eller tilsvarende), med testbruker, kort og kjøp ferdig lagt inn, og **registrering og beregning virker uten LLM-nøkkel**.
+6. Satser ligger som konfigurerbare data, ikke i kode: å endre en sats krever ingen kodeendring.
 
-**Beslutningspunkter:**
-- Regelmotor vs. KI-tolkning av fritekst/kvitteringer, og hvordan usikker KI-tolkning håndteres (bekreftelse fra bruker før lagring)
-- Nivåpoeng-veiviseren bør kun foreslå kort brukeren faktisk har mulighet til å få, og kun kort som faktisk gir nivåpoeng — Lunar sitt SAS-tilknyttede kort gir f.eks. kun bonuspoeng og skal derfor aldri foreslås som vei til medlemsnivå, kun som lavterskel-alternativ (ingen kredittvurdering) i bonuspoeng-sammenheng
-- Kvitteringer viser ikke alltid korttype tydelig (kan stå som avkortet kortnummer, logo, eller mangle helt) — KI-agenten må håndtere usikker gjenkjenning ved å spørre brukeren om bekreftelse fremfor å gjette feil kilde
-- Terskler for Companion Ticket/FlyPremium varierer per korttype og kan endres av utsteder — lagres konfigurerbart, verifisert mot kredittkortguider 27.09.2026, bør reverifiseres mot American Express/Mastercard direkte
-- Nøyaktige satser og regler for BillKill/Betalo, samt nivåpoeng-satser for American Express Classic/Premium, er ikke fullt verifisert og må bekreftes fra offisielle kilder før implementasjon — eurobonusguiden.no er en nyttig, detaljert kilde å ta utgangspunkt i her
-- Nøyaktige start-/sluttdatoer for EuroBonus' kvalifiseringsperiode (som ikke følger kalenderåret) må verifiseres mot SAS' offisielle regelverk for at ChangeMakers-anbefalingen skal beregnes riktig
-- EuroBonus-partnerbutikker (som Rituals) har individuelle poengsatser som kan være betydelig høyere enn kortets vanlige sats (opptil ~50 poeng per 100 kr observert), varierer fra butikk til butikk, og er lett å gå glipp av siden det ikke er tydelig i kassen — dette må modelleres som en per-butikk-oppslagstabell, ikke én fast verdi, og er et sterkt argument for KI-tolkning av kvittering/e-postbekreftelse fremfor manuell utregning
-- Personvern og lagring av kjøpshistorikk (kryptering, lagringstid)
-- Håndtering av API-nøkler (f.eks. til KI-modellen) er ikke avklart av faglærer ennå — avvent konkret løsning før dette bygges inn i Dockerfile/miljøvariabler
-- Omfang for MVP: start med Trumf + de to mest brukte SAS-kortene, utvid til flere kilder i senere iterasjon
+## Scope
 
-**Utenfor omfang (for nå):** direkte integrasjon mot bank-/kort-API-er for automatisk transaksjonsimport; støtte for andre flyselskapers lojalitetsprogrammer.
+**Med i v1**
+- Innlogging og brukerprofil med hvilke kort brukeren har.
+- Kilder: **Trumf** + to kort: **SAS American Express** og **SAS EuroBonus Mastercard**.
+- Registrering av kjøp via fritekst (KI-tolket, bekreftes av bruker) og via manuelt skjema (uten KI).
+- Regelmotor med separate bonuspoeng og nivåpoeng, fordelt på kilde, med konfigurerbare satser.
+- Samlet oversikt og kjøpshistorikk.
+
+**Senere (rekkefølge ikke avgjort)**
+- Fremgangsvisning mot bonuspoeng-mål, neste medlemsnivå og forbrukterskler (Companion Ticket, FlyPremium).
+- ChangeMakers-sporing og varsel om dobbel fullføring.
+- Lunar-kortet, partnerbutikker (per-butikk-oppslagstabell), BillKill/Betalo, flyreiser.
+- Kvitteringsbilde med gjenkjenning av kortnettverk. Opplastede filer lagres i fillagring, ikke i databasen (fillagringen settes opp i arkitekturen fra start).
+- Nivåpoeng-veiviser (kun kort brukeren faktisk kan få og som gir nivåpoeng).
+- KI-genererte anbefalinger.
+
+**Utenfor omfang**
+- Direkte integrasjon mot bank-/kort-API-er for automatisk transaksjonsimport.
+- Andre flyselskapers lojalitetsprogrammer.
+
+## Visjon
+
+På sikt kan appen bli et sted der man ser alle lojalitetsprogrammer som påvirker reisene sine, med flere kilder, flere programmer og anbefalinger som sier hva som lønner seg før man betaler. V1 er bevisst smal: en regelmotor som stemmer, og en registrering som er enkel.
+
+## Åpne spørsmål (må avklares før de bygges)
+
+- Nøyaktige satser og regler for Trumf-overføring, BillKill/Betalo og Amex Classic/Premium er ikke verifisert mot offisielle kilder.
+- Start-/sluttdatoer for kvalifiseringsperioden må verifiseres mot SAS' regelverk (kreves for ChangeMakers-anbefalingen).
+- Terskler for Companion Ticket/FlyPremium: verifisert mot kredittkortguider 27.09.2026, bør kontrolleres mot utsteder.
+- KI-modell: OpenRouter er godkjent av faglærer, og gruppemedlemmet betaler selv. Nøkkelen holdes utenfor Git; v1 skal virke uten nøkkel (se suksesskriterium 5).
+- Personvern for kjøpshistorikk (lagringstid, kryptering). Test- og eksempeldata skal være oppdiktede, aldri ekte kvitteringer.

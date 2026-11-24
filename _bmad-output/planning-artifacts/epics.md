@@ -312,3 +312,153 @@ So that appen holder seg riktig og jeg styrer dataene mine.
 **Given** jeg velger Slett konto
 **When** jeg bekrefter i bunnarket
 **Then** kontoen og all min data slettes, og andre brukeres data påvirkes ikke (NFR-9, AR-8)
+
+## Epic 2: Registrere kjøp og se poengene
+
+Bruker registrerer et kjøp med skjema og ser nøyaktig hvor mange poeng det ga, fordelt på kort og Trumf. Kjøp kan rettes og slettes. Regelmotoren er testet mot en tabell med forventede poeng.
+
+### Story 2.1: Satser og butikker som data
+
+As a utvikler,
+I want satser, butikker og regler lagret som data med kilde og dato,
+So that en sats kan endres uten kodeendring.
+
+**Acceptance Criteria:**
+
+**Given** tabellene `Sats` og `Butikk` ikke finnes
+**When** historien er ferdig
+**Then** de er opprettet med Prisma-migrering (AR-3)
+**And** `Sats` har kilde, poengtype, poeng per 100 kr, gyldig fra/til, kilde-URL og verifisert dato (FR-15, AR-4)
+
+**Given** seed kjøres
+**When** jeg ser i databasen
+**Then** satsene er: Amex Elite 20 per 100 kr, Mastercard Premium 15 per 100 kr (NOK), Trumf 1 % (3 % på Trippel-Trumf-dag) og 13,5 poeng per Trumf-krone
+**And** de ni Trumf-butikkene (MENY, KIWI, SPAR, Joker, CC Mat, Jacob's, Lerøy Mat, Nærbutikken, Gigaboks) ligger i `Butikk` med felt for om Amex godtas (FR-23)
+**And** hver sats merkes `[VERIFISER]` der den ikke er kontrollert, i tråd med `docs/verifiseringsliste.md`
+
+**Given** en sats i databasen endres
+**When** appen leser aktive satser
+**Then** den nye satsen brukes uten kodeendring (SK-5)
+
+### Story 2.2: Regelmotor for kortpoeng
+
+As a bruker,
+I want at appen regner ut bonuspoengene fra kortet riktig,
+So that jeg kan stole på tallene.
+
+**Acceptance Criteria:**
+
+**Given** `src/domain/` og en sats (poeng per 100 kr)
+**When** jeg beregner poeng for et beløp i øre
+**Then** resultatet er et heltall, avrundet nedover (FR-13, AR-5, NFR-8)
+**And** 450 kr gir 90 poeng med Amex Elite og 67 poeng med Mastercard Premium
+
+**Given** en testtabell med 10–15 kjøp i `tests/`, regnet for hånd, med kilde (FR-13, NFR-3)
+**When** jeg kjører `npm test`
+**Then** alle forventede verdier stemmer
+**And** estimatet overstiger aldri forventet verdi med mer enn ett poeng per kjøp (motmålet i PRD)
+
+**Given** funksjonen
+**When** den kalles
+**Then** den bruker bare argumentene den får (ingen database, ingen klokke) (AR-2)
+**And** testene er navngitt med kravet de dekker (AR-12)
+
+### Story 2.3: Regelmotor for Trumf-poeng
+
+As a bruker,
+I want at appen anslår Trumf-poengene riktig, også på Trippel-Trumf-dag,
+So that jeg ser hele bildet av hva et kjøp gir.
+
+**Acceptance Criteria:**
+
+**Given** et kjøp i en av de ni butikkene
+**When** jeg beregner Trumf-poeng uten Trippel-Trumf
+**Then** Trumf-bonus er 1 % av beløpet og poengene er 13,5 per Trumf-krone, avrundet nedover
+**And** 450 kr gir 4,50 Trumf-kroner og 60 poeng (60,75 rundet ned) (FR-14)
+
+**Given** Trippel-Trumf-dag er avkrysset
+**When** jeg beregner Trumf-poeng
+**Then** Trumf-bonus er 3 % og 450 kr gir 13,50 Trumf-kroner og 182 poeng (FR-12, FR-14)
+
+**Given** en butikk som ikke er blant de ni
+**When** jeg beregner Trumf-poeng
+**Then** resultatet er 0, og funksjonen sier hvorfor (FR-14)
+
+**Given** testtabellen fra 2.2
+**When** den utvides med Trumf-kolonner
+**Then** `npm test` stemmer for alle rader
+
+### Story 2.4: Registrere kjøp med skjema og se poengfordelingen
+
+As a bruker,
+I want å registrere et kjøp og se hvor mange poeng det ga fra kort og Trumf,
+So that jeg ser at stablingen virker.
+
+**Acceptance Criteria:**
+
+**Given** jeg er på Registrer kjøp
+**When** jeg fyller inn beløp, butikk, kort og dato, og eventuelt krysser av for Trippel-Trumf-dag
+**Then** jeg kan lagre kjøpet (FR-8, FR-12)
+**And** beløp i NOK gjelder, tallfeltet har talltastatur med komma, og andre valutaer får en forklaring (UX-DR12, UX-DR15)
+
+**Given** jeg lagrer
+**When** kjøpet er gyldig
+**Then** `Kjop` og én `Poengtransaksjon` per kilde (kort og Trumf) lagres i én databasetransaksjon, med `sats_id` (AR-6)
+**And** tabellene opprettes i denne historien med Prisma-migrering
+
+**Given** kjøpet er lagret
+**When** jeg ser Poengfordeling
+**Then** jeg ser rader per kilde (kort, Trumf) og en sum, der Trumf-tall har «ca.» (FR-16, UX-DR9, UX-DR14)
+
+**Given** jeg velger en butikk utenfor de ni
+**When** jeg lagrer
+**Then** kortpoeng regnes og jeg ser «Denne butikken gir ikke Trumf-poeng i appen ennå.» (UX-DR12)
+
+**Given** jeg har ett kort
+**When** jeg velger kort
+**Then** bare det kortet vises
+
+**Given** Hjem
+**When** et kjøp er lagret
+**Then** «poeng nå» summerer startverdi og lagrede kortpoeng; Trumf-poeng vises i fordelingen (skillet overført/ventende kommer i Epic 3) (AR-6)
+
+### Story 2.5: Se kjøpslisten
+
+As a bruker,
+I want en liste over kjøpene mine med poeng per kjøp,
+So that jeg kan sjekke hva jeg har registrert.
+
+**Acceptance Criteria:**
+
+**Given** jeg har registrert kjøp
+**When** jeg åpner fanen Kjøp
+**Then** jeg ser kjøpene sist-først, med butikk, dato, beløp, kort og poeng til høyre (FR-11, UX-DR10)
+**And** estimerte tall har «ca.» (UX-DR14)
+
+**Given** jeg ikke har registrert kjøp
+**When** jeg åpner fanen Kjøp
+**Then** jeg ser en tom tilstand med knappen «Registrer første kjøp» (UX-DR12)
+
+**Given** to brukere med kjøp
+**When** jeg er innlogget
+**Then** jeg ser bare mine egne kjøp (NFR-9, AR-8)
+
+### Story 2.6: Rette og slette et kjøp
+
+As a bruker,
+I want å rette eller slette et kjøp jeg la inn feil,
+So that poengene mine stemmer.
+
+**Acceptance Criteria:**
+
+**Given** jeg åpner et kjøp fra listen
+**When** jeg endrer beløp, butikk, kort, dato eller Trippel-Trumf og lagrer
+**Then** poengtransaksjonene for kjøpet regnes på nytt i én databasetransaksjon, og listen og Hjem viser nye tall (FR-10, AR-6)
+
+**Given** jeg åpner et kjøp
+**When** jeg velger Slett og bekrefter i bunnarket
+**Then** kjøpet og transaksjonene slettes, og Hjem regnes på nytt (FR-10, UX-DR10)
+
+**Given** satsene er endret siden kjøpet ble lagret
+**When** jeg endrer kjøpet
+**Then** nye transaksjoner bruker aktiv sats, og `sats_id` viser hvilken som ble brukt (AR-6)

@@ -579,3 +579,284 @@ So that jeg kan bestemme meg mens jeg står i butikken.
 **Given** appen kjører uten KI-nøkkel
 **When** jeg bruker Før kjøp
 **Then** alt virker (FR-25, NFR-1)
+
+## Epic 5: Klar for sensor og publisering
+
+Sensor kan klone repoet, følge README og kjøre og teste appen på 15–20 minutter. Appen er publisert, repoet er ryddig, og prosessen er dokumentert og kan følges fra plan til kode.
+
+### Story 5.1: README som sensor kan følge uten hjelp
+
+As a sensor,
+I want en README med eksakte kommandoer,
+So that jeg får appen til å kjøre uten å spørre gruppen.
+
+**Acceptance Criteria:**
+
+**Given** README.md
+**When** jeg leser den
+**Then** den har en kort beskrivelse av hva appen gjør og hvem den er for, forutsetninger med versjoner (Node, Docker), og steg-for-steg oppstart med kommandoer som kan kopieres (AR-13, AR-11)
+**And** den beskriver `.env.example`, testbrukeren, hvordan `npm test` kjøres og at fritekst er valgfritt uten nøkkel (NFR-1, NFR-2)
+
+**Given** en ren klone av repoet
+**When** jeg følger README fra topp til bunn
+**Then** appen starter og kjernefunksjonene kan brukes uten avvik
+**And** README inneholder en oversikt over mappestrukturen og lenker til planleggings- og prosessdokumentasjonen
+
+### Story 5.2: Eksempeldata som viser appen
+
+As a sensor,
+I want en testbruker med realistiske, oppdiktede data,
+So that jeg ser appen i bruk med en gang.
+
+**Acceptance Criteria:**
+
+**Given** seed kjøres
+**When** jeg logger inn med testbrukeren
+**Then** hen har begge kort, et poengmål, startverdier og 10–15 oppdiktede kjøp i flere butikker (NFR-1, NFR-6)
+**And** Hjem, Kjøp og Før kjøp viser meningsfulle tall
+
+**Given** repoet
+**When** jeg søker etter ekte nøkler, kortnummer eller kvitteringer
+**Then** jeg finner ingen (NFR-6)
+
+### Story 5.3: Ryddig repo
+
+As a sensor,
+I want et repo med bare relevante filer,
+So that jeg finner frem og ikke møter hemmeligheter.
+
+**Acceptance Criteria:**
+
+**Given** rotmappen
+**When** jeg ser på den
+**Then** løse notater (`product-brief.md`, `tilbakemelding-product-brief.md`, `poeng-*.bundle`) er flyttet til `docs/` eller fjernet, og mappen inneholder bare kode, konfig, README og dokumentmapper (AR-13)
+
+**Given** `.gitignore`
+**When** jeg kjører en ny installasjon og build
+**Then** `node_modules`, byggemapper og `.env` havner ikke i git
+
+**Given** git-historikken
+**When** jeg søker etter nøkler og `.env`-filer
+**Then** jeg finner ingen (kontrollert og notert)
+
+### Story 5.4: Testplan og kvalitetssikring dokumentert
+
+As a sensor,
+I want å se hva som er testet og hvordan feil ble funnet og rettet,
+So that jeg kan vurdere kvalitetssikringen.
+
+**Acceptance Criteria:**
+
+**Given** `docs/testplan.md`
+**When** jeg leser den
+**Then** den lister automatiserte tester (hva de dekker og hvordan de kjøres), manuelle tester for kjerneflytene og for feil input (ugyldig beløp, tomt skjema, feil passord, manglende KI-nøkkel), og resultatet av hver
+
+**Given** historikken
+**When** jeg leser PR-er eller commit-meldinger
+**Then** jeg finner minst tre konkrete eksempler på feil i KI-generert kode som ble funnet og rettet, beskrevet i `docs/prosess/`
+
+### Story 5.5: Prosessdokumentasjon som kan følges
+
+As a sensor,
+I want en oversikt over prosessen fra idé til kode,
+So that jeg ser hvordan KI ble styrt.
+
+**Acceptance Criteria:**
+
+**Given** `docs/prosess/README.md`
+**When** jeg åpner den
+**Then** den lenker til brief, PRD, UX, arkitektur, epics og sesjonsloggene i `.logs/`, i rekkefølgen de ble laget (AR-12)
+**And** den har en tabell fra krav (FR-ID) til historie til commit eller PR for kjernen
+
+**Given** viktige valg
+**When** jeg leser dokumentet
+**Then** valgene fra arkitekturen (for eksempel PostgreSQL, ren kjerne, Better Auth) er forklart med begrunnelse og alternativer
+
+### Story 5.6: Publisering på Vercel
+
+As a bruker,
+I want at appen er tilgjengelig på nett,
+So that jeg kan bruke den fra mobilen.
+
+**Acceptance Criteria:**
+
+**Given** en administrert PostgreSQL-database (Neon eller Supabase brukt som ren Postgres) og et Vercel-prosjekt koblet til repoet
+**When** appen bygges
+**Then** miljøvariabler er satt i Vercel (ikke i repoet), migreringer er kjørt, og appen svarer på en offentlig adresse (NFR-4, AR-10)
+**And** kjernefunksjonene kan brukes fra mobilen
+
+**Given** nøkkel til OpenRouter ikke er satt
+**When** appen kjører på Vercel
+**Then** fritekst er skjult og skjemaet fungerer (NFR-2)
+
+**And** adressen og eventuelle begrensninger står i README
+
+## Epic 6: Registrere kjøp med fritekst
+
+Bruker skriver «450 kr på Kiwi med Mastercard Premium», får et forslag med usikre felt markert, og bekrefter før noe lagres.
+
+### Story 6.1: KI-tolkning på serveren med trygg fallback
+
+As a utvikler,
+I want at serveren tolker fritekst via OpenRouter og alltid faller trygt tilbake,
+So that appen aldri krasjer eller lekker nøkkelen.
+
+**Acceptance Criteria:**
+
+**Given** en miljøvariabel med OpenRouter-nøkkel
+**When** serveren får en fritekst
+**Then** den kaller OpenRouter og returnerer et strukturert forslag (beløp, butikk, kort, dato), validert mot kjente felt (FR-7, AR-7)
+**And** nøkkelen finnes bare på serveren og aldri i klienten eller i git (AR-10)
+
+**Given** nøkkelen mangler eller kallet feiler
+**When** bruker prøver fritekst
+**Then** serveren svarer at fritekst ikke er tilgjengelig, og skjemaet vises (NFR-2)
+
+**Given** innspilte svar i `tests/`
+**When** jeg kjører `npm test`
+**Then** validering og fallback testes uten nøkkel og uten nettverk
+
+### Story 6.2: Fritekstfelt og bekreftelse av forslaget
+
+As a bruker,
+I want å skrive kjøpet med egne ord og bekrefte forslaget,
+So that registreringen går raskt uten at feil lagres.
+
+**Acceptance Criteria:**
+
+**Given** jeg er på Registrer kjøp og KI er tilgjengelig
+**When** jeg skriver «450 kr på Kiwi med Mastercard Premium» og trykker Tolk
+**Then** Bekreft forslag viser beløp, butikk, kort og dato som felt jeg kan rette (FR-7, FR-9)
+
+**Given** KI er usikker på et felt
+**When** forslaget vises
+**Then** feltet er markert med forklaring («Vi antok i dag. Sjekk den.»), og Bekreft er deaktivert til jeg har sett eller endret feltet (UX-DR8)
+**And** farge er ikke eneste signal (UX-DR13)
+
+**Given** forslaget vises
+**When** jeg ikke har trykket Bekreft
+**Then** ingenting er lagret (FR-9, SK-3)
+
+**Given** jeg bekrefter
+**When** kjøpet lagres
+**Then** det følger samme lagring og poengberegning som skjemaet (Story 2.4)
+
+**Given** KI ikke er tilgjengelig
+**When** jeg åpner Registrer kjøp
+**Then** jeg ser skjemaet og beskjeden «Fritekst er ikke tilgjengelig akkurat nå. Fyll ut skjemaet.»
+
+### Story 6.3: Måle treffsikkerheten
+
+As a utvikler,
+I want å måle hvor godt tolkningen treffer,
+So that jeg vet om SK-2 er oppfylt.
+
+**Acceptance Criteria:**
+
+**Given** en fil med minst 10 testsetninger og forventet tolkning i `tests/`
+**When** jeg kjører et eget skript med en gyldig nøkkel
+**Then** skriptet viser antall riktige tolkninger og hvilke felt som feilet (SK-2)
+**And** minst 8 av 10 er riktige, og usikre felt markeres i stedet for å gjettes
+
+**Given** skriptet
+**When** jeg kjører `npm test`
+**Then** skriptet kjøres ikke (det krever nøkkel og kjøres manuelt), og README forklarer hvordan det kjøres
+
+## Epic 7: Mål i detalj, varsler og tempo
+
+Bruker følger Companion Ticket og Fly Premium, får varsel ved halvveis, og ser når målet nås i dagens tempo.
+
+### Story 7.1: Companion Ticket
+
+As a bruker med Amex Elite,
+I want å følge Companion Ticket og utløpsdatoen,
+So that jeg ikke mister fordelen.
+
+**Acceptance Criteria:**
+
+**Given** jeg har Amex Elite og har valgt Companion Ticket som mål
+**When** jeg åpner Mål-detalj fra mål-kortet
+**Then** jeg kan krysse av for at billetten er opptjent og oppgi når (FR-19)
+**And** appen viser utløpsdato (opptjent i 2026 gjelder til 31.12.2027, og kan ikke forlenges)
+
+**Given** jeg oppdaterer Amex-forbruket i kalenderåret
+**When** jeg lagrer
+**Then** jeg ser fremgang mot 150 000 og 300 000 kr, maks to fordeler per år, merket «oppgitt av deg, sist oppdatert [dato]» (FR-19)
+
+**Given** billetten er utløpt
+**When** jeg åpner Hjem
+**Then** mål-kortet er merket utløpt (UX-DR12)
+
+### Story 7.2: Fly Premium
+
+As a bruker med Mastercard Premium,
+I want å følge fremgangen mot Fly Premium,
+So that jeg vet hvor langt det er til nivået jeg vil ha.
+
+**Acceptance Criteria:**
+
+**Given** jeg har Mastercard Premium og velger Fly Premium som mål
+**When** jeg åpner Mål-detalj
+**Then** jeg oppgir total for EuroBonus-poeng opptjent siste 12 måneder, og ser nærmeste nivå (75 000, 125 000 eller 200 000) og hva som gjenstår (FR-20)
+**And** totalen er merket «oppgitt av deg, sist oppdatert [dato]»
+
+**Given** jeg bare vil bruke SAS-bonusreiser eller også SkyTeam
+**When** jeg ser Fly Premium
+**Then** det vises med forklaringen at det gjelder bare bonusbilletter med SAS (FR-6, FR-20)
+
+### Story 7.3: Halvveis-varsel
+
+As a bruker med poengmål og Companion Ticket,
+I want varsel når jeg har halvparten av målet,
+So that jeg vet at det holder til én reise alene.
+
+**Acceptance Criteria:**
+
+**Given** saldoen er minst halvparten av poengmålet og en gyldig Companion Ticket er avkrysset
+**When** jeg åpner Hjem
+**Then** et banner viser «Du har halvparten. Med Companion Ticket (gyldig til [dato]) holder det til en reise alene.» (FR-18, UX-DR11)
+
+**Given** jeg lukker banneret
+**When** saldoen er uendret
+**Then** det vises ikke igjen før saldoen endres
+
+**Given** billetten er utløpt eller ikke avkrysset
+**When** jeg åpner Hjem
+**Then** banneret vises ikke
+
+### Story 7.4: Tempo og prognose
+
+As a bruker,
+I want å se når jeg når målet i dagens tempo,
+So that jeg kan avgjøre om jeg bør endre hvor jeg betaler.
+
+**Acceptance Criteria:**
+
+**Given** jeg har registrert kjøp siste fire uker
+**When** jeg åpner Hjem
+**Then** jeg ser «Du når målet ca. [dato] hvis tempoet fortsetter» (FR-21)
+**And** tidspunktet og beregningen kommer fra `domain/`, med tiden som argument (AR-2)
+
+**Given** jeg ikke har kjøp siste fire uker
+**When** jeg åpner Hjem
+**Then** ingen dato vises, men «Ingen dato ennå: du har ikke registrert kjøp de siste fire ukene.» (FR-21, UX-DR12)
+
+**Given** jeg har kjøp med ulike kort
+**When** jeg ser tempoet
+**Then** jeg ser hva dato ville blitt om alle kjøpene gikk med anbefalt kort (FR-21)
+
+### Story 7.5: Avveining mellom kort (utsettes hvis tiden er knapp)
+
+As a bruker,
+I want å se når et kort gir færre poeng, men bringer meg nærmere et terskelmål,
+So that jeg tar et informert valg.
+
+**Acceptance Criteria:**
+
+**Given** anbefalingen viser to kort og ett gir færre poeng
+**When** det andre kortet bringer meg nærmere et terskelmål (Companion Ticket)
+**Then** en setning viser avveiningen (FR-24)
+
+**Given** Amex Elite gir flest poeng i alle ni butikker
+**When** jeg bruker v1-butikkene
+**Then** avveiningen vises ikke (ingen virkning i v1), og historien kan utsettes til «Senere»

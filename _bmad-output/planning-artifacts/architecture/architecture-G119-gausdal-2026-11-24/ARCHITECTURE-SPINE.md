@@ -18,7 +18,7 @@ companions: []
 
 # Architecture Spine — EuroBonus Poeng-stacker
 
-`[ASSUMPTION]` = foreslått av Claude, ikke eksplisitt godkjent av Anneli. `[ADOPTED]` = valgt av Anneli i coaching.
+`[ADOPTED]` = valgt av Anneli i coaching.
 
 ## Design Paradigm
 
@@ -63,13 +63,13 @@ graph LR
 - **Prevents:** satser hardkodet i kode; endring som krever kodeendring
 - **Rule:** Satser lagres i tabellen `Sats` (kilde, poengtype, poeng per 100 kr, gyldig fra/til, kilde-URL, verifisert dato). `src/app/` leser aktive satser og sender dem som argument til `domain/`. Seed-fil fyller startsatsene. Ingen sats-tall i `domain/`.
 
-### AD-5 — Beløp og poeng er heltall; avrunding ned ett sted `[ASSUMPTION]`
+### AD-5 — Beløp og poeng er heltall; avrunding ned ett sted `[ADOPTED]`
 
 - **Binds:** FR-13, FR-14, FR-17, NFR-8, SK-1
 - **Prevents:** flyttallsfeil og ulik avrunding i to deler av appen, som kan overestimere poeng
-- **Rule:** Beløp lagres som heltall i øre. Poeng og Trumf-poeng er heltall. All avrunding gjøres i `domain/`, alltid nedover. Kortpoeng = beløp i øre × sats per 100 kr ÷ 10 000, rundet ned per kjøp og kilde (ikke per 100 kr-blokk). Trumf-bonus rundes ned til hele øre, og Trumf-poeng (× 13,5) rundes ned til hele poeng. Ingen andre lag runder av eller regner poeng.
+- **Rule:** Beløp lagres som heltall i øre. Poeng og Trumf-poeng er heltall. All avrunding gjøres i `domain/`, alltid nedover. Kortpoeng = beløp i øre × sats per 100 kr ÷ 10 000, rundet ned per kjøp og kilde (ikke per 100 kr-blokk). Trumf-bonus rundes ned til hele øre, og Trumf-poeng (× 13,5) rundes ned til hele poeng. Trippel-Trumf (3 %) er bare gyldig når kjøpsdatoen er en torsdag; regelen ligger i `domain/`. Ingen andre lag runder av eller regner poeng.
 
-### AD-6 — Poengtransaksjoner er lagret fasit per kjøp og kilde `[ASSUMPTION]`
+### AD-6 — Poengtransaksjoner er lagret fasit per kjøp og kilde `[ADOPTED]`
 
 - **Binds:** FR-10, FR-11, FR-16, FR-17, FR-21
 - **Prevents:** at lister, baren og tempo viser forskjellige tall, og at en satsendring skriver om gamle poeng i det skjulte
@@ -105,7 +105,7 @@ graph LR
 - **Prevents:** en app sensor ikke får startet
 - **Rule:** `docker compose up` starter app og Postgres, kjører migreringer og seed (testbruker, kort, kjøp, satser). `npm test` kjører alle enhetstester uten nøkler og uten nettverk. Begge kommandoene står i README med forutsetninger.
 
-### AD-12 — Sporbarhet fra krav til kode `[ASSUMPTION]`
+### AD-12 — Sporbarhet fra krav til kode `[ADOPTED]`
 
 - **Binds:** alt arbeid
 - **Prevents:** at sensor ikke kan følge planen fra krav til kode

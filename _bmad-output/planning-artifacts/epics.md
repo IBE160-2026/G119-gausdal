@@ -391,6 +391,10 @@ So that jeg ser hele bildet av hva et kjøp gir.
 **When** jeg beregner Trumf-poeng
 **Then** resultatet er 0, og funksjonen sier hvorfor (FR-14)
 
+**Given** en kjøpsdato
+**When** jeg spør om Trippel-Trumf-torsdag er mulig
+**Then** svaret er ja bare hvis datoen er en torsdag, og 3 % brukes aldri på andre dager (FR-12)
+
 **Given** testtabellen fra 2.2
 **When** den utvides med Trumf-kolonner
 **Then** `npm test` stemmer for alle rader
@@ -406,6 +410,7 @@ So that jeg ser at stablingen virker.
 **Given** jeg er på Registrer kjøp
 **When** jeg fyller inn beløp, butikk, kort og dato, og eventuelt krysser av for Trippel-Trumf-torsdag
 **Then** jeg kan lagre kjøpet (FR-8, FR-12)
+**And** avkryssingen for Trippel-Trumf-torsdag kan bare velges når kjøpsdatoen er en torsdag, ellers er den deaktivert med forklaring (FR-12)
 **And** beløp i NOK gjelder, tallfeltet har talltastatur med komma, og andre valutaer får en forklaring (UX-DR12, UX-DR15)
 
 **Given** jeg lagrer

@@ -75,6 +75,7 @@ Atferd. Visuelle spesifikasjoner ligger i `DESIGN.md.Components`.
 | Ventende Trumf | Hjem | Segmentet «venter» vises med antall Trumf-kroner av 200. |
 | Trumf ikke koblet | Hjem, Før kjøp | Trumf-poeng vises ikke i tempoet; Før kjøp viser bare kortpoeng. Lenke «Endre oppsett». |
 | Bruker har ett kort | Før kjøp, Hjem | Bare det kortet vises og regnes. Companion Ticket-mål skjules uten Amex Elite; Fly Premium skjules uten Mastercard Premium (FR-2). |
+| Trippel-Trumf-avkryssing på ikke-torsdag | Registrer, Bekreft | Avkryssingen er deaktivert med forklaringen «Trippel-Trumf gjelder bare torsdager.» |
 | Fritekst tolket sikkert | Bekreft | Alle felt fylt. Bruker må likevel trykke Bekreft. |
 | Fritekst delvis usikker | Bekreft | Usikre felt markert og tomme eller forhåndsvalgt «Velg…». Bekreft er deaktivert til usikre felt er sett (trykket eller endret). |
 | KI utilgjengelig / nøkkel mangler | Registrer kjøp | Skjema vises. Beskjed: «Fritekst er ikke tilgjengelig akkurat nå. Fyll ut skjemaet.» Ingenting blokkeres. |

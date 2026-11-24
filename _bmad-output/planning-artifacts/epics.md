@@ -462,3 +462,120 @@ So that poengene mine stemmer.
 **Given** satsene er endret siden kjøpet ble lagret
 **When** jeg endrer kjøpet
 **Then** nye transaksjoner bruker aktiv sats, og `sats_id` viser hvilken som ble brukt (AR-6)
+
+## Epic 3: Se fremgang mot poengmålet
+
+Bruker ser på Hjem hvor langt hen er kommet mot poengmålet, med skille mellom overførte og ventende Trumf-poeng.
+
+### Story 3.1: Regel for overførte og ventende Trumf-poeng
+
+As a bruker,
+I want at appen skiller mellom Trumf-poeng som er overført og de som venter,
+So that jeg ikke tror målet er nådd før poengene faktisk er på EuroBonus-kontoen.
+
+**Acceptance Criteria:**
+
+**Given** `src/domain/` og Trumf-kroner opptjent (startverdi pluss lagrede kjøp)
+**When** Trumf er koblet med automatisk overføring
+**Then** hver hele 200 Trumf-kroner regnes som overført (13,5 poeng per Trumf-krone), og resten under 200 regnes som ventende (FR-14, FR-17)
+**And** 200 Trumf-kroner gir 2 700 poeng, og tallene rundes nedover (AR-5, NFR-8)
+
+**Given** Trumf ikke er koblet til EuroBonus
+**When** funksjonen kalles
+**Then** Trumf-poeng regnes ikke med som overført eller ventende (FR-5)
+
+**Given** enhetstester i `tests/`
+**When** jeg kjører `npm test`
+**Then** grensetilfellene 0, 199,99, 200 og 400 Trumf-kroner består, og testene er navngitt med FR-17 (AR-12)
+
+### Story 3.2: Fremdriftsbar på Hjem
+
+As a bruker,
+I want en bar som viser hvor mange poeng jeg har og hvor mange som venter,
+So that jeg ser fremgangen mot poengmålet med en gang.
+
+**Acceptance Criteria:**
+
+**Given** jeg har et poengmål og har registrert kjøp
+**When** jeg åpner Hjem
+**Then** «poeng nå» er startverdi pluss kortpoeng pluss overførte Trumf-poeng (FR-17, AR-6)
+**And** baren har to segmenter, overført og ventende, med tekstetikett og tall under (UX-DR4)
+
+**Given** baren vises
+**When** jeg bruker skjermleser
+**Then** den leses opp som «62 400 av 180 000 poeng, 14 400 venter på overføring» (UX-DR4, UX-DR13)
+
+**Given** poengene overstiger målet
+**When** baren tegnes
+**Then** den stopper på 100 % uten feil
+
+**Given** systemet har «reduser bevegelse»
+**When** baren oppdateres
+**Then** den animeres ikke (UX-DR13)
+
+**Given** jeg registrerer, endrer eller sletter et kjøp
+**When** jeg går til Hjem
+**Then** baren viser de nye tallene (FR-10)
+
+## Epic 4: Få anbefaling før kjøp
+
+Bruker skriver butikk og beløp og får vite hvilket kort som gir flest poeng, med hensyn til hvor kortene godtas.
+
+### Story 4.1: Anbefalingsmotor
+
+As a bruker,
+I want at appen regner ut hvilket kort som gir flest poeng i en butikk,
+So that jeg velger riktig før jeg betaler.
+
+**Acceptance Criteria:**
+
+**Given** `src/domain/`, en butikk, et beløp, brukerens kort og aktive satser
+**When** jeg beregner anbefaling
+**Then** resultatet viser poeng per kort og Trumf-poeng, og anbefalt kort er det med flest poeng (FR-22, FR-25)
+**And** 800 kr hos KIWI gir 160 poeng med Amex Elite, 120 med Mastercard Premium og 108 Trumf-poeng (8 Trumf-kroner)
+
+**Given** en butikk der Amex ikke godtas
+**When** jeg beregner anbefaling
+**Then** Mastercard Premium anbefales og Amex merkes «godtas ikke her» (FR-23)
+
+**Given** brukeren bare har ett kort
+**When** jeg beregner anbefaling
+**Then** bare det kortet regnes og anbefales (FR-2)
+
+**Given** Trumf ikke er koblet eller butikken ikke er blant de ni
+**When** jeg beregner anbefaling
+**Then** Trumf-poeng er 0 og årsaken følger med
+
+**Given** funksjonen
+**When** den kjøres
+**Then** den bruker samme regelmotor som kjøpsregistreringen og ingen KI (FR-25, AR-2)
+**And** testene i `tests/` består med `npm test`
+
+### Story 4.2: Før kjøp-skjermen
+
+As a bruker,
+I want å skrive butikk og beløp og se anbefalingen med en gang,
+So that jeg kan bestemme meg mens jeg står i butikken.
+
+**Acceptance Criteria:**
+
+**Given** jeg er på fanen Før kjøp (eller har trykket snarveien på Hjem)
+**When** jeg skriver beløp og velger butikk
+**Then** anbefalingskortene oppdateres mens jeg skriver, uten «Beregn»-knapp (UX-DR7)
+**And** det anbefalte kortet har merket «Anbefalt» og forklaring, og begge kort vises med poeng per kilde og sum
+
+**Given** butikken er utenfor de ni eller Amex ikke godtas
+**When** jeg ser anbefalingen
+**Then** jeg ser forklaringen i klartekst («Denne butikken gir ikke Trumf-poeng i appen ennå.», «Amex godtas ikke her, bruk Mastercard Premium.») (UX-DR12)
+
+**Given** felt er tomme
+**When** jeg åpner skjermen
+**Then** jeg ser en rolig tom tilstand uten feilmelding
+
+**Given** jeg bruker skjermleser
+**When** anbefalingen endres
+**Then** den nye anbefalingen leses opp, og tallfeltet har talltastatur med komma (UX-DR13, UX-DR15)
+
+**Given** appen kjører uten KI-nøkkel
+**When** jeg bruker Før kjøp
+**Then** alt virker (FR-25, NFR-1)

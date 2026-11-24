@@ -11,5 +11,9 @@
 - [ ] 2026-11-17 [prd-og-design](999-2026-11-11-14-24-00-prd-og-design.md) — verifisere `[VERIFISER]`-punktene i docs/verifiseringsliste.md (særlig Mastercard Premium-poeng og avrunding)
 - [ ] 2026-11-17 [prd-og-design](999-2026-11-11-14-24-00-prd-og-design.md) — Fly Premium: saldo eller opptjening siste 12 måneder, og betydningen av «+»
 - [ ] 2026-11-17 [prd-og-design](999-2026-11-11-14-24-00-prd-og-design.md) — pushe grenen claude/affectionate-gauss-x9t6f7 fra egen maskin (Claude-appen mangler skrivetilgang, 403)
-- [ ] 2026-11-17 [prd-og-design](999-2026-11-11-14-24-00-prd-og-design.md) — kjøre bmad-ux, deretter bmad-architecture og bmad-create-epics-and-stories; samkjøre dokumentmappe med faglærer (.docs/)
+- [x] 2026-11-17 [prd-og-design](999-2026-11-11-14-24-00-prd-og-design.md) — kjøre bmad-ux, deretter bmad-architecture og bmad-create-epics-and-stories; samkjøre dokumentmappe med faglærer (.docs/) (bmad-ux løst 2026-11-24; resten under)
 - [ ] 2026-11-17 [prd-og-design](999-2026-11-11-14-24-00-prd-og-design.md) — avgjøre om avveiningskravet mellom kort flyttes til Senere
+- [ ] 2026-11-24 [prd-og-design](999-2026-11-11-14-24-00-prd-og-design.md) — kjøre bmad-architecture, deretter bmad-create-epics-and-stories og bmad-sprint-planning
+- [ ] 2026-11-24 [prd-og-design](999-2026-11-11-14-24-00-prd-og-design.md) — samkjøre dokumentmappe med faglærer (.docs/planning-artifacts/ mot _bmad-output/planning-artifacts/)
+- [ ] 2026-11-24 [prd-og-design](999-2026-11-11-14-24-00-prd-og-design.md) — UX: måle kontrast for nye farger (#2F5D8C, mellomgrå «venter»), vurdere HTML-skisser/gjennomgang av spinene
+- [ ] 2026-11-24 [prd-og-design](999-2026-11-11-14-24-00-prd-og-design.md) — pushe grenen claude/wonderful-ptolemy-6vj73f fra egen maskin (403 fra Claude-appen)

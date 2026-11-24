@@ -28,7 +28,7 @@ SAS-appen viser opptjening, men gir ikke råd om hvordan man tjener poeng raskes
 - **Poengmål:** et antall bonuspoeng brukeren vil spare, for eksempel 180 000.
 - **Trumf-krone:** Trumf-bonus i kroner. Hver Trumf-krone gir 13,5 EuroBonus-poeng.
 - **Overført / ventende poeng:** Trumf overfører til EuroBonus når 200 Trumf-kroner er opptjent. Opptjente Trumf-kroner under 200 er ventende.
-- **Trippel-Trumf-dag:** en dag med 3 % Trumf-bonus i stedet for 1 %. Kommer uregelmessig.
+- **Trippel-Trumf-torsdag:** en torsdag med 3 % Trumf-bonus i stedet for 1 %. Trippel-Trumf-torsdager er alltid på torsdager, men ikke hver torsdag (ca. hver 3.–4. uke). De annonseres på trumf.no, Trumfs Facebookside og via nyhetsbrev, SMS og push-varsel i Trumf-appen.
 - **Companion Ticket:** 50 % poengrabatt for opptil to personer på en bonusreise, opptjent ved forbruk på Amex i et kalenderår.
 - **Fly Premium:** Mastercard-fordel som gir tilgang til å bestille bonusreiser i premium economy/business hos SAS, avhengig av alle EuroBonus-poeng opptjent siste 12 måneder, fra kort, kjøp og flyreiser.
 
@@ -38,7 +38,7 @@ Petter er 27, reiser litt med SAS og vil samle ca. 180 000 bonuspoeng til en lon
 
 1. **Oppsett.** Når Petter oppretter bruker, velger han kortene sine og målene sine: antall poeng, og eventuelt Companion Ticket (Amex) eller Fly Premium (Mastercard). Han legger inn hvor han står i dag, og om Trumf er koblet til EuroBonus med automatisk overføring.
 2. **Før et kjøp.** Petter skal handle og åpner appen. Appen anbefaler hvilket kort han bør bruke. I butikker der Amex godtas (alle NorgesGruppen- og Coop-butikker) gir Amex Elite flere poeng (20 mot 15 per 100 kr) og teller mot Companion Ticket. Ellers er Mastercard Premium det sikre valget.
-3. **Etter kjøpet.** Petter registrerer kjøpet med noen ord («450 kr på Kiwi med Mastercard Premium») eller et skjema. Han krysser av hvis det er Trippel-Trumf-dag. Appen foreslår en tolkning med beløp, butikk, kort og dato, og regner ut Trumf-bonusen selv. Han bekrefter eller retter.
+3. **Etter kjøpet.** Petter registrerer kjøpet med noen ord («450 kr på Kiwi med Mastercard Premium») eller et skjema. Han krysser av hvis det er Trippel-Trumf-torsdag. Appen foreslår en tolkning med beløp, butikk, kort og dato, og regner ut Trumf-bonusen selv. Han bekrefter eller retter.
 4. **Fremgang.** Baren øverst flytter seg. Appen viser ca. hvor mange poeng kjøpet ga, fordelt på kilde (kort og Trumf), og hva som gjenstår til målet.
 5. **Tempo.** Appen viser når han når målet i dagens tempo, og hva han kan gjøre for å nå det raskere (se FR om tempo).
 
@@ -69,7 +69,7 @@ Petter er 27, reiser litt med SAS og vil samle ca. 180 000 bonuspoeng til en lon
 - Kvitteringsbilde med automatisk lesing av kort og Trumf-kroner.
 - Nivåpoeng, som krediteres én gang i måneden på begge kort (Mastercard Premium: 25 % av månedens bonuspoeng, minimum 500 i måneder kortet brukes) og nivåpoeng-veiviser.
 - Flere kort (Lunar, andre), partnerbutikker, BillKill/Betalo, flyreiser, ChangeMakers.
-- Trumf i flere butikker (Esso, Norli, Mester Grønn og andre) og råd om å vente til neste Trippel-Trumf-dag (krever at appen kjenner datoene).
+- Trumf i flere butikker (Esso, Norli, Mester Grønn og andre) og råd om å vente til neste Trippel-Trumf-torsdag (krever at appen kjenner datoene).
 
 **Utenfor omfang**
 - Automatisk import fra bank eller kort. Andre flyselskapers lojalitetsprogrammer.
@@ -90,11 +90,11 @@ Petter er 27, reiser litt med SAS og vil samle ca. 180 000 bonuspoeng til en lon
 - **FR-9** Tolkningen vises som forslag, usikre felt markeres, og ingenting lagres før bruker har bekreftet.
 - **FR-10** Bruker kan redigere og slette et kjøp. Poeng og fremdrift regnes på nytt.
 - **FR-11** Bruker ser en liste over registrerte kjøp med beregnede poeng per kjøp.
-- **FR-12** Ved registrering av et kjøp (fritekst og skjema) kan bruker krysse av for at det er Trippel-Trumf-dag. Uten avkryssing regner appen 1 % Trumf-bonus, med avkryssing 3 %.
+- **FR-12** Ved registrering av et kjøp (fritekst og skjema) kan bruker krysse av for at det er Trippel-Trumf-torsdag. Uten avkryssing regner appen 1 % Trumf-bonus, med avkryssing 3 %.
 
 ### Poengberegning
 - **FR-13** Regelmotoren beregner bonuspoeng per kilde og kjøp: Amex Elite 20 per 100 kr, og Mastercard Premium 15 per 100 kr på kjøp i norske kroner (20 i lokal valuta i utlandet og 25 på flybilletter på sas.no). I v1 gjelder bare kjøp i norske kroner i de ni butikkene. Eksempel: 450 kr gir 90 poeng med Amex Elite og 67 poeng med Mastercard Premium (67,5 rundet ned). `[VERIFISER: Amex 20 per 100 kr stemmer i to kontrollkjøp; Mastercard Premium ikke kontrollert; avrunding uavklart]`
-- **FR-14** Appen beregner Trumf-bonus for kjøp i de ni dagligvarebutikkene i v1: 1 % av beløpet, og 3 % hvis bruker har krysset av for Trippel-Trumf-dag. Disse kommer uregelmessig, ca. hver 3.–4. uke, og er ikke fast på torsdager. Hver Trumf-krone gir 13,5 EuroBonus-poeng, og poengene overføres når 200 Trumf-kroner er opptjent. Beregningen er et estimat, siden Trumf-appens faktiske bonus kan avvike noe fra 1 % av kjøpesummen. Estimatet rundes ned, så appen ikke overestimerer. Eksempel: 450 kr hos KIWI gir 4,50 Trumf-kroner, altså 60 poeng (60,75 rundet ned). På Trippel-Trumf-dag gir det 13,50 Trumf-kroner, altså 182 poeng (182,25 rundet ned). `[VERIFISER: 13,5 poeng per Trumf-krone og overføring ved 200 er bekreftet i Trumf-appen (200 kr ga 2 700 poeng); 1 % avviker noe i kontrollkjøp]`
+- **FR-14** Appen beregner Trumf-bonus for kjøp i de ni dagligvarebutikkene i v1: 1 % av beløpet, og 3 % hvis bruker har krysset av for Trippel-Trumf-torsdag. Disse er alltid på torsdager, men kommer ikke hver torsdag (ca. hver 3.–4. uke). Hver Trumf-krone gir 13,5 EuroBonus-poeng, og poengene overføres når 200 Trumf-kroner er opptjent. Beregningen er et estimat, siden Trumf-appens faktiske bonus kan avvike noe fra 1 % av kjøpesummen. Estimatet rundes ned, så appen ikke overestimerer. Eksempel: 450 kr hos KIWI gir 4,50 Trumf-kroner, altså 60 poeng (60,75 rundet ned). På Trippel-Trumf-torsdag gir det 13,50 Trumf-kroner, altså 182 poeng (182,25 rundet ned). `[VERIFISER: 13,5 poeng per Trumf-krone og overføring ved 200 er bekreftet i Trumf-appen (200 kr ga 2 700 poeng); 1 % avviker noe i kontrollkjøp]`
 - **FR-15** Satser og regler lagres som konfigurerbare data med kilde og dato for verifisering.
 - **FR-16** Etter at et kjøp er lagret, viser appen poengene fordelt på kilde (kort og Trumf) med sum, slik at stablingen er synlig.
 

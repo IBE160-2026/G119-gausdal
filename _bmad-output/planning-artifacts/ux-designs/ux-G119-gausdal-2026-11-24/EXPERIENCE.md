@@ -137,7 +137,7 @@ Variant: han skriver en butikk der Amex ikke godtas → kortet merkes «Godtas i
 2. Han skriver «450 kr på Kiwi med Mastercard Premium».
 3. Han trykker Tolk.
 4. Forslaget vises: beløp 450, butikk Kiwi, kort Mastercard Premium. Datoen er usikker og markert gul: «Vi antok i dag. Sjekk den.»
-5. Han krysser av Trippel-Trumf-dag (det var det) og retter datoen til i går.
+5. Han krysser av Trippel-Trumf-torsdag (det var det) og retter datoen til torsdag.
 6. Han trykker Bekreft.
 7. **Climax:** Poengfordelingen vises: Mastercard Premium 67, Trumf ca. 182, sum ca. 249. Baren på Hjem har flyttet seg.
 

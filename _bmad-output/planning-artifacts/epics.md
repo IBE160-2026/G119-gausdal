@@ -30,9 +30,9 @@ FR-8: Bruker kan registrere kjøp med manuelt skjema uten KI.
 FR-9: Tolkningen vises som forslag, usikre felt markeres, og ingenting lagres før bekreftelse.
 FR-10: Bruker kan redigere og slette et kjøp. Poeng og fremdrift regnes på nytt.
 FR-11: Bruker ser en liste over registrerte kjøp med beregnede poeng per kjøp.
-FR-12: Ved registrering kan bruker krysse av for Trippel-Trumf-dag (1 % mot 3 % Trumf-bonus).
+FR-12: Ved registrering kan bruker krysse av for Trippel-Trumf-torsdag (1 % mot 3 % Trumf-bonus).
 FR-13: Regelmotoren beregner bonuspoeng per kilde og kjøp: Amex Elite 20 per 100 kr, Mastercard Premium 15 per 100 kr i NOK (v1: bare NOK i de ni butikkene).
-FR-14: Appen beregner Trumf-bonus i de ni dagligvarebutikkene: 1 % (3 % på Trippel-Trumf-dag), 13,5 poeng per Trumf-krone, overføring ved 200 Trumf-kroner. Estimat som rundes ned.
+FR-14: Appen beregner Trumf-bonus i de ni dagligvarebutikkene: 1 % (3 % på Trippel-Trumf-torsdag), 13,5 poeng per Trumf-krone, overføring ved 200 Trumf-kroner. Estimat som rundes ned.
 FR-15: Satser og regler lagres som konfigurerbare data med kilde og dato for verifisering.
 FR-16: Etter lagring viser appen poengene fordelt på kilde (kort og Trumf) med sum.
 FR-17: En bar øverst viser fremgang mot poengmålet, og skiller overførte poeng fra ventende Trumf-poeng.
@@ -104,7 +104,7 @@ FR-8: Epic 2 - Skjema for kjøp
 FR-9: Epic 6 - Forslag og bekreftelse av KI-tolkning
 FR-10: Epic 2 - Rediger og slett kjøp
 FR-11: Epic 2 - Kjøpsliste
-FR-12: Epic 2 - Trippel-Trumf-dag
+FR-12: Epic 2 - Trippel-Trumf-torsdag
 FR-13: Epic 2 - Regelmotor kort
 FR-14: Epic 2 - Regelmotor Trumf
 FR-15: Epic 2 - Satser som data
@@ -338,7 +338,7 @@ So that en sats kan endres uten kodeendring.
 
 **Given** seed kjøres
 **When** jeg ser i databasen
-**Then** satsene er: Amex Elite 20 per 100 kr, Mastercard Premium 15 per 100 kr (NOK), Trumf 1 % (3 % på Trippel-Trumf-dag) og 13,5 poeng per Trumf-krone
+**Then** satsene er: Amex Elite 20 per 100 kr, Mastercard Premium 15 per 100 kr (NOK), Trumf 1 % (3 % på Trippel-Trumf-torsdag) og 13,5 poeng per Trumf-krone
 **And** de ni Trumf-butikkene (MENY, KIWI, SPAR, Joker, CC Mat, Jacob's, Lerøy Mat, Nærbutikken, Gigaboks) ligger i `Butikk` med felt for om Amex godtas (FR-23)
 **And** hver sats merkes `[VERIFISER]` der den ikke er kontrollert, i tråd med `docs/verifiseringsliste.md`
 
@@ -373,7 +373,7 @@ So that jeg kan stole på tallene.
 ### Story 2.3: Regelmotor for Trumf-poeng
 
 As a bruker,
-I want at appen anslår Trumf-poengene riktig, også på Trippel-Trumf-dag,
+I want at appen anslår Trumf-poengene riktig, også på Trippel-Trumf-torsdag,
 So that jeg ser hele bildet av hva et kjøp gir.
 
 **Acceptance Criteria:**
@@ -383,7 +383,7 @@ So that jeg ser hele bildet av hva et kjøp gir.
 **Then** Trumf-bonus er 1 % av beløpet og poengene er 13,5 per Trumf-krone, avrundet nedover
 **And** 450 kr gir 4,50 Trumf-kroner og 60 poeng (60,75 rundet ned) (FR-14)
 
-**Given** Trippel-Trumf-dag er avkrysset
+**Given** Trippel-Trumf-torsdag er avkrysset
 **When** jeg beregner Trumf-poeng
 **Then** Trumf-bonus er 3 % og 450 kr gir 13,50 Trumf-kroner og 182 poeng (FR-12, FR-14)
 
@@ -404,7 +404,7 @@ So that jeg ser at stablingen virker.
 **Acceptance Criteria:**
 
 **Given** jeg er på Registrer kjøp
-**When** jeg fyller inn beløp, butikk, kort og dato, og eventuelt krysser av for Trippel-Trumf-dag
+**When** jeg fyller inn beløp, butikk, kort og dato, og eventuelt krysser av for Trippel-Trumf-torsdag
 **Then** jeg kan lagre kjøpet (FR-8, FR-12)
 **And** beløp i NOK gjelder, tallfeltet har talltastatur med komma, og andre valutaer får en forklaring (UX-DR12, UX-DR15)
 

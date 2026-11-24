@@ -1,6 +1,6 @@
 ---
 status: draft
-stepsCompleted: [1]
+stepsCompleted: [1, 2]
 inputDocuments:
   - _bmad-output/planning-artifacts/prds/prd-G119-gausdal-2026-11-12/prd.md
   - _bmad-output/planning-artifacts/prds/prd-G119-gausdal-2026-11-12/addendum.md
@@ -150,3 +150,165 @@ Bruker skriver «450 kr på Kiwi med Mastercard Premium», får et forslag med u
 ### Epic 7: Mål i detalj, varsler og tempo
 Bruker følger Companion Ticket og Fly Premium, får varsel ved halvveis, og ser når målet nås i dagens tempo.
 **FRs covered:** FR-18, FR-19, FR-20, FR-21, FR-24
+
+## Epic 1: Kom i gang med konto og oppsett
+
+Bruker kan opprette konto, logge inn, velge kort og mål, legge inn startverdier og se Hjem med sin startsaldo. Første historie setter opp prosjektet.
+
+### Story 1.1: Prosjektoppsett som kan startes med én kommando
+
+As a sensor,
+I want å starte appen med `docker compose up`,
+So that jeg ser at den kjører uten å sette opp noe selv.
+
+**Acceptance Criteria:**
+
+**Given** en ren maskin med Docker og repoet klonet
+**When** jeg kjører `docker compose up`
+**Then** app og PostgreSQL starter, Prisma-migreringer kjøres, og en startside svarer på `http://localhost:3000`
+**And** `.env.example` finnes med alle variabelnavn og ingen verdier, og `.env` er i `.gitignore` (AR-10, NFR-6)
+
+**Given** prosjektet er satt opp
+**When** jeg kjører `npm test`
+**Then** Vitest kjører og består uten nøkler og uten nettverk, med minst én test mot en funksjon i `src/domain/` (AR-11)
+
+**Given** koden i `src/domain/`
+**When** en fil der importerer fra `src/app/`, Prisma, eller bruker `fetch` eller `Date.now()`
+**Then** lint feiler (AR-2)
+
+**And** mappestrukturen følger ryggraden (`src/domain/`, `src/app/`, `prisma/`, `tests/`, `docs/`), og README har en første versjon med oppstartskommandoene (AR-13)
+
+### Story 1.2: Tema og navigasjonsskall
+
+As a bruker,
+I want en app som ser rolig og ryddig ut på mobil med fast navigasjon,
+So that jeg finner frem uten å tenke.
+
+**Acceptance Criteria:**
+
+**Given** appen åpnes på mobil
+**When** jeg ser en innlogget side
+**Then** nedre fane viser Hjem, Før kjøp, Kjøp og Meg, med innholdet i én kolonne og maks 480 px bredde (UX-DR3)
+**And** farger, typografi, spacing og avrunding kommer fra tokens i én temafil (UX-DR1)
+
+**Given** systemet står i mørk modus
+**When** jeg åpner appen
+**Then** appen vises i mørk palett (UX-DR2)
+
+**Given** skallet
+**When** jeg bruker skjermleser eller størrelsen på tekst er satt til størst
+**Then** fanene har navn og tilstand, trykkflater er minst 48 px, og ingenting kuttes (UX-DR13)
+
+### Story 1.3: Opprette konto og logge inn og ut
+
+As a bruker,
+I want å opprette konto med e-post og passord og logge inn og ut,
+So that dataene mine er mine alene.
+
+**Acceptance Criteria:**
+
+**Given** jeg ikke er innlogget
+**When** jeg oppretter konto med gyldig e-post og passord
+**Then** kontoen lages, jeg logges inn og sendes til oppsett (FR-1)
+**And** passordet lagres hashet i egen Postgres, aldri i klartekst (AR-8)
+
+**Given** jeg har en konto
+**When** jeg logger inn med riktige opplysninger
+**Then** jeg kommer til Hjem
+**And** med feil passord vises en forståelig feilmelding knyttet til feltet (UX-DR13)
+
+**Given** jeg er innlogget
+**When** jeg logger ut
+**Then** sesjonen avsluttes og beskyttede sider krever innlogging
+
+**Given** seed er kjørt
+**When** jeg logger inn med testbrukeren fra README
+**Then** det fungerer, og testbrukeren har oppdiktede data (NFR-6)
+
+### Story 1.4: Velge kort, Trumf og type bonusreiser
+
+As a ny bruker,
+I want å fortelle hvilke kort jeg har, om Trumf er koblet, og om jeg vil bruke SAS eller også SkyTeam,
+So that appen regner riktig for meg.
+
+**Acceptance Criteria:**
+
+**Given** jeg er i oppsett
+**When** jeg velger Amex Elite, Mastercard Premium eller begge
+**Then** valget lagres på min bruker (FR-2)
+**And** jeg må velge minst ett kort for å gå videre
+
+**Given** jeg er i oppsett
+**When** jeg svarer om Trumf er koblet til EuroBonus med automatisk overføring
+**Then** svaret lagres (FR-5)
+
+**Given** jeg er i oppsett
+**When** jeg velger «bare SAS» eller «også andre SkyTeam-selskaper»
+**Then** valget lagres og styrer hvilke mål som vises senere (FR-6)
+
+**Given** tabellene `Kort` og `BrukerKort` ikke finnes
+**When** historien er ferdig
+**Then** de er opprettet via Prisma-migrering og Amex Elite og Mastercard Premium ligger i seed (AR-3)
+
+### Story 1.5: Velge mål og legge inn startverdier
+
+As a ny bruker,
+I want å velge målene mine og fortelle hvor jeg står i dag,
+So that fremgangen min har et utgangspunkt.
+
+**Acceptance Criteria:**
+
+**Given** jeg har valgt kort og bonusreisetype
+**When** jeg velger poengmål (antall poeng), og eventuelt Companion Ticket og Fly Premium
+**Then** målene lagres (FR-3)
+**And** Companion Ticket tilbys bare med Amex Elite, og Fly Premium bare med Mastercard Premium og «bare SAS» eller «også SkyTeam» (FR-2, FR-6)
+
+**Given** jeg er i oppsett
+**When** jeg oppgir bonuspoeng i dag, poeng siste 12 måneder, Amex-forbruk hittil i kalenderåret og Trumf-kroner siden siste overføring
+**Then** verdiene lagres som heltall (poeng) og øre (beløp) (FR-4, AR-5)
+**And** tallfelt åpner talltastatur med komma, og ugyldige verdier gir en forståelig feil knyttet til feltet (UX-DR13, UX-DR15)
+
+**Given** oppsettet er fullført
+**When** jeg trykker Ferdig
+**Then** jeg kommer til Hjem
+
+### Story 1.6: Hjem med startsaldo
+
+As a bruker,
+I want å se poengene mine og målet mitt på Hjem,
+So that jeg ser hvor jeg står med en gang.
+
+**Acceptance Criteria:**
+
+**Given** jeg har fullført oppsett og ikke har registrert kjøp
+**When** jeg åpner Hjem
+**Then** jeg ser «poeng nå» fra mine startverdier av poengmålet, med en fremdriftsbar og norsk tallformat (`62 400`, `180 000`) (UX-DR5, UX-DR14)
+**And** tempo viser «Ingen dato ennå: du har ikke registrert kjøp de siste fire ukene.» (UX-DR12)
+
+**Given** jeg bare har ett kort
+**When** jeg åpner Hjem
+**Then** bare relevante mål vises (UX-DR6)
+
+**Given** jeg bruker skjermleser
+**When** jeg møter hovedtallet
+**Then** det leses opp som «62 400 av 180 000 poeng» (UX-DR4, UX-DR13)
+
+### Story 1.7: Meg: endre oppsett, oppdatere saldoer og slette konto
+
+As a bruker,
+I want å endre kort, mål og saldoer og kunne slette kontoen min,
+So that appen holder seg riktig og jeg styrer dataene mine.
+
+**Acceptance Criteria:**
+
+**Given** jeg er på fanen Meg
+**When** jeg endrer kort, mål eller startverdier
+**Then** endringene lagres og Hjem viser de nye tallene (FR-2–5)
+
+**Given** jeg er på fanen Meg
+**When** jeg oppdaterer poeng i dag, siste 12 måneder, Amex-forbruk eller Trumf-kroner
+**Then** verdiene lagres og viser «oppgitt av deg, sist oppdatert [dato]»
+
+**Given** jeg velger Slett konto
+**When** jeg bekrefter i bunnarket
+**Then** kontoen og all min data slettes, og andre brukeres data påvirkes ikke (NFR-9, AR-8)

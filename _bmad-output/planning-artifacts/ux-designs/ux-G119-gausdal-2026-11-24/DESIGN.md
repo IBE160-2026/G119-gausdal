@@ -1,34 +1,34 @@
 ---
 name: EuroBonus Poeng-stacker
-description: Mobil-først verktøy for å nå poengmål raskere. Rolig, tallfokusert og ærlig om usikkerhet. Én aksentfarge, lys og mørk modus.
-status: draft
+description: Mobil-først verktøy for å nå poengmål raskere. Rolig, tallfokusert og ærlig om usikkerhet. Dempede grå flater med én dempet blå aksent, lys og mørk modus.
+status: final
 updated: 2026-11-24
 sources:
   - _bmad-output/planning-artifacts/prds/prd-G119-gausdal-2026-11-12/prd.md
 colors:
-  surface-base: '#F6F7F9'
+  surface-base: '#ECEEF0'
   surface-raised: '#FFFFFF'
-  ink-primary: '#14181F'
-  ink-secondary: '#566070'
-  ink-disabled: '#9AA3B0'
-  border-hairline: '#E1E5EB'
-  accent: '#1F6F5C'
-  accent-soft: '#DCEFE9'
+  ink-primary: '#1B1F24'
+  ink-secondary: '#58606A'
+  ink-disabled: '#9AA1AA'
+  border-hairline: '#D3D7DC'
+  accent: '#2F5D8C'
+  accent-soft: '#E0E9F2'
   on-accent: '#FFFFFF'
-  pending: '#8A9BB0'
+  pending: '#8E98A4'
   uncertain: '#8A5A00'
   uncertain-soft: '#FFF1D6'
   danger: '#B3261E'
-  surface-base-dark: '#0F1217'
-  surface-raised-dark: '#181D25'
-  ink-primary-dark: '#EEF1F5'
-  ink-secondary-dark: '#A4AEBC'
-  ink-disabled-dark: '#5D6776'
-  border-hairline-dark: '#283040'
-  accent-dark: '#5CC4A8'
-  accent-soft-dark: '#16342C'
-  on-accent-dark: '#0F1217'
-  pending-dark: '#6F8099'
+  surface-base-dark: '#14171B'
+  surface-raised-dark: '#1E2227'
+  ink-primary-dark: '#EDEFF1'
+  ink-secondary-dark: '#A8AFB8'
+  ink-disabled-dark: '#636B75'
+  border-hairline-dark: '#2E343B'
+  accent-dark: '#7FAEDB'
+  accent-soft-dark: '#1F2E3D'
+  on-accent-dark: '#101418'
+  pending-dark: '#707B88'
   uncertain-dark: '#F0B955'
   uncertain-soft-dark: '#3A2D10'
   danger-dark: '#F2B8B5'
@@ -98,13 +98,13 @@ components:
 
 Appen er en **kalkulator med anbefaling**, ikke et spill og ikke en bankapp. Den skal føles som en nøktern venn som kan regelverket: kort, presis og ærlig om hva den ikke vet. Ingen konfetti, ingen streaks, ingen «du er nesten der!»-oppfordringer. Tallene er hovedpersonen.
 
-Utseendet bygger på tillit gjennom ro: lyse, rolige flater, mye luft, ett fargeaksent. Appen bruker ikke SAS', American Express', Mastercards eller Trumfs farger, logoer eller kortbilder. Kort og butikker omtales med tekst. `[ASSUMPTION: egen nøytral identitet, ikke varemerkene]`
+Utseendet bygger på tillit gjennom ro: dempede grå flater, mye luft og ett dempet blått aksent. Grånyansen er valgt fordi den ligger nær tonen i flybransjen og SAS-logoen, uten å kopiere den. Blåtonen er stålblå og dempet, bevisst ikke den lysere, mettede blåfargen som EuroBonus-guiden bruker. Appen bruker ikke SAS', American Express', Mastercards eller Trumfs logoer, kortbilder eller eksakte varemerkefarger. Kort og butikker omtales med tekst.
 
 ## Colors
 
-- **Overflate (`surface-base` / `surface-raised`)** er en kjølig, nesten hvit bakgrunn med hvite kort. Mørk modus følger systeminnstillingen og har tilsvarende dype blågrå flater.
-- **Aksent (`accent`, grønn)** betyr «fremdrift og anbefalt valg». Den brukes på primærknappen, den overførte delen av fremdriftsbaren og anbefalt kort. Aldri til pynt.
-- **Venter (`pending`, dempet blågrå)** er den ventende delen av fremdriftsbaren: Trumf-kroner under 200 som ikke er overført ennå. Den skal se mindre «sikker» ut enn aksenten.
+- **Overflate (`surface-base` / `surface-raised`)** er en lys, nøytral grå bakgrunn med hvite kort. Mørk modus følger systeminnstillingen og har tilsvarende dype grå flater.
+- **Aksent (`accent`, dempet stålblå)** betyr «fremdrift og anbefalt valg». Den brukes på primærknappen, den overførte delen av fremdriftsbaren og anbefalt kort. Aldri til pynt.
+- **Venter (`pending`, mellomgrå)** er den ventende delen av fremdriftsbaren: Trumf-kroner under 200 som ikke er overført ennå. Den skal se mindre «sikker» ut enn aksenten, og må kunne skilles fra den blå også uten farge (se etikett under baren).
 - **Usikker (`uncertain` på `uncertain-soft`, gul-brun)** markerer felt KI-tolkningen er usikker på, og estimater med kjent usikkerhet. Bruker alltid tekst i tillegg til farge.
 - **Feil (`danger`)** er forbeholdt sletting og valideringsfeil.
 
@@ -145,7 +145,7 @@ Flatt. Kort skilles fra bakgrunnen med tonen i `surface-raised` og en hårfin ka
 |---|---|
 | Vis «ca.» og forklaring der tallet er et estimat | Vis estimater som eksakte tall |
 | Bruk tekst + form + farge for tilstand | Rødt/grønt eller farge alene som eneste signal |
-| Ett aksentgrønt, sparsomt | Flere aksentfarger, gradienter, pynt |
+| Én dempet blå aksent, sparsomt, på grå flater | Flere aksentfarger, mettet lysblå, gradienter, pynt |
 | Norsk tallformat (`90 000`, `13,5`) | Engelsk tallformat |
 | La «Anbefalt» være en tydelig merkelapp på ett kort | Skjule hvorfor kortet er anbefalt |
 | Trykkflater ≥ 48 px | Små ikon-only-knapper |

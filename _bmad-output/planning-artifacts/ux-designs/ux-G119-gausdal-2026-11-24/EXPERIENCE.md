@@ -1,6 +1,6 @@
 ---
 name: EuroBonus Poeng-stacker
-status: draft
+status: final
 sources:
   - _bmad-output/planning-artifacts/prds/prd-G119-gausdal-2026-11-12/prd.md
   - _bmad-output/planning-artifacts/prds/prd-G119-gausdal-2026-11-12/addendum.md
@@ -9,17 +9,17 @@ updated: 2026-11-24
 
 # EuroBonus Poeng-stacker — Experience Spine
 
-> Utkast. `[ASSUMPTION]` = antatt, ikke bekreftet av Anneli. Visuell identitet ligger i `DESIGN.md` (tokens refereres som `{path.til.token}`). Spinene vinner ved konflikt med eventuelle skisser.
+> Godkjent av Anneli 2026-11-24. Visuell identitet ligger i `DESIGN.md` (tokens refereres som `{path.til.token}`). Spinene vinner ved konflikt med eventuelle skisser.
 
 ## Foundation
 
-Mobil først, enkelt tilgjengelig: en responsiv webapp som brukes med én hånd i butikken og på farten. `[ASSUMPTION: webapp i nettleser, ikke native app; publiseres på Vercel iflg. NFR-4]` Norsk grensesnitt (NFR-7). Lys og mørk modus følger systemet. UI-system (for eksempel shadcn/Tailwind) avgjøres i `bmad-architecture`; denne spinen spesifiserer bare atferd. Alle funksjoner unntatt fritekst virker uten KI-nøkkel (NFR-1, FR-25).
+Mobil først, enkelt tilgjengelig: en responsiv webapp som brukes med én hånd i butikken og på farten. Norsk grensesnitt (NFR-7). Lys og mørk modus følger systemet. UI-system (for eksempel shadcn/Tailwind) avgjøres i `bmad-architecture`; denne spinen spesifiserer bare atferd. Alle funksjoner unntatt fritekst virker uten KI-nøkkel (NFR-1, FR-25).
 
 Primærprotagonist: **Petter**, 27, SAS Mastercard Premium + American Express SAS Elite, handler på Kiwi og Meny, sparer til ca. 180 000 bonuspoeng.
 
 ## Information Architecture
 
-Nedre fanelinje med fire faner. `[ASSUMPTION: fane-valg]`
+Nedre fanelinje med fire faner.
 
 | Flate | Nås fra | Formål | Dekker |
 |---|---|---|---|
@@ -78,7 +78,7 @@ Atferd. Visuelle spesifikasjoner ligger i `DESIGN.md.Components`.
 | Fritekst tolket sikkert | Bekreft | Alle felt fylt. Bruker må likevel trykke Bekreft. |
 | Fritekst delvis usikker | Bekreft | Usikre felt markert og tomme eller forhåndsvalgt «Velg…». Bekreft er deaktivert til usikre felt er sett (trykket eller endret). |
 | KI utilgjengelig / nøkkel mangler | Registrer kjøp | Skjema vises. Beskjed: «Fritekst er ikke tilgjengelig akkurat nå. Fyll ut skjemaet.» Ingenting blokkeres. |
-| Butikk utenfor de ni | Før kjøp, Registrer | «Denne butikken gir ikke Trumf-poeng i appen ennå.» Kortpoeng regnes fortsatt. `[ASSUMPTION]` |
+| Butikk utenfor de ni | Før kjøp, Registrer | «Denne butikken gir ikke Trumf-poeng i appen ennå.» Kortpoeng regnes fortsatt. |
 | Kjøp i annen valuta | Registrer | Forklar at v1 bare regner kjøp i norske kroner. |
 | Amex godtas ikke | Før kjøp | Anbefal Mastercard Premium og forklar hvorfor (FR-23). |
 | Companion Ticket utløpt | Mål-detalj, Hjem | Mål-kortet merkes utløpt; varselet vises ikke. |
@@ -88,10 +88,10 @@ Atferd. Visuelle spesifikasjoner ligger i `DESIGN.md.Components`.
 ## Interaction Primitives
 
 - Trykk for å handle. Sveip ned lukker ark. Ingen skjulte bevegelser.
-- Kjøpsrader kan slettes fra Kjøp-detalj med bekreftelsesark. Ingen sveip-sletting i v1. `[ASSUMPTION]`
+- Kjøpsrader kan slettes fra Kjøp-detalj med bekreftelsesark. Ingen sveip-sletting i v1.
 - Pull-to-refresh bare på Hjem og Kjøp.
 - Tallfelt åpner talltastatur med komma som desimaltegn.
-- Beløp og butikk i «Før kjøp» oppdaterer anbefalingen mens bruker skriver, uten egen «Beregn»-knapp. `[ASSUMPTION]`
+- Beløp og butikk i «Før kjøp» oppdaterer anbefalingen mens bruker skriver, uten egen «Beregn»-knapp.
 - **Forbudt:** konfetti, streaks, push-varsler for å få bruker tilbake, popup-annonser, automatisk lagring av KI-tolkning.
 
 ## Accessibility Floor
@@ -107,7 +107,7 @@ Atferd. Visuell kontrast ligger i `DESIGN.md`.
 
 ## Responsive & Platform
 
-Én kolonne på mobil. På nettbrett og desktop sentreres samme layout i maks 480 px bredde; ingen egen desktopopplevelse i v1. Nedre fane beholdes. `[ASSUMPTION]`
+Én kolonne på mobil. På nettbrett og desktop sentreres samme layout i maks 480 px bredde; ingen egen desktopopplevelse i v1. Nedre fane beholdes.
 
 ## Ærlighet om usikkerhet
 
@@ -115,7 +115,7 @@ Produktspesifikk regel. Appen skal aldri se sikrere ut enn den er (NFR-8, SK-2, 
 
 - Tall der Trumf-bonus er estimert vises med «ca.» og rundes ned.
 - Poeng fra bruker-oppgitte saldoer (Fly Premium-total, Amex-forbruk) vises med «oppgitt av deg, sist oppdatert [dato]».
-- Verdier som ikke er verifisert mot offisiell kilde (se `docs/verifiseringsliste.md`) merkes ikke i grensesnittet i v1; de er et datakvalitetsmål, ikke en brukerhandling. `[ASSUMPTION]`
+- Verdier som ikke er verifisert mot offisiell kilde (se `docs/verifiseringsliste.md`) merkes ikke i grensesnittet i v1; de er et datakvalitetsmål, ikke en brukerhandling.
 - Ingenting lagres før bruker har bekreftet.
 
 ## Key Flows

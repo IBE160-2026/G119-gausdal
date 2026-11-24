@@ -357,9 +357,10 @@ So that jeg kan stole på tallene.
 **Given** `src/domain/` og en sats (poeng per 100 kr)
 **When** jeg beregner poeng for et beløp i øre
 **Then** resultatet er et heltall, avrundet nedover (FR-13, AR-5, NFR-8)
-**And** 450 kr gir 90 poeng med Amex Elite og 67 poeng med Mastercard Premium
+**And** avrundingsregelen følger vedlegget: beløp × sats ÷ 100 kr, rundet ned per kjøp og kilde (AR-5)
+**And** 450 kr gir 90 poeng med Amex Elite og 67 poeng med Mastercard Premium, og 99 kr gir 19 med Amex Elite og 14 med Mastercard Premium
 
-**Given** en testtabell med 10–15 kjøp i `tests/`, regnet for hånd, med kilde (FR-13, NFR-3)
+**Given** testtabellen med 15 kjøp i `docs/vedlegg-satser.md`, regnet for hånd og lagt som testdata i `tests/` (FR-13, NFR-3)
 **When** jeg kjører `npm test`
 **Then** alle forventede verdier stemmer
 **And** estimatet overstiger aldri forventet verdi med mer enn ett poeng per kjøp (motmålet i PRD)

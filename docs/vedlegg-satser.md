@@ -10,7 +10,7 @@ Status per 2026-11-11. **Alle satser her må verifiseres mot offisielle kilder (
 | SAS EuroBonus Mastercard (standard) | 10 per 100 kr i NOK (15 i lokal valuta i utlandet, 20 på flybilletter på sas.no) | 0 | Delvis: stemmer med saseurobonusmastercard.no (skjermbilde 2026-11-17) |
 | Lunar SAS-debetkort (senere) | 8 per 100 kr | 0 | Nei |
 | Partnerbutikk, eksempel Rituals (senere) | ca. 50 per 100 kr observert (65 på 129 kr) | ukjent | Nei |
-| Trumf → EuroBonus | 13,5 per Trumf-krone, overføres ved 200 opptjente Trumf-kroner (oppgitt av Anneli 2026-11-17). Trumf-bonus 1 % av kjøpet, 3 % på Trippel-Trumf-torsdag (trumf.no, skjermbilde 2026-11-17) | 0 (antatt) | Delvis: prosentene fra trumf.no, poengsats ikke |
+| Trumf → EuroBonus | 13,5 per Trumf-krone, overføres ved 200 opptjente Trumf-kroner (oppgitt av Anneli 2026-11-17). Trumf-bonus 1 % av kjøpet, 3 % på Trippel-Trumf-dag (trumf.no, skjermbilde 2026-11-17) | 0 (antatt) | Delvis: prosentene fra trumf.no, poengsats ikke |
 | SAS Mastercard Premium | **15 per 100 kr på kjøp i norske kroner, 20 i lokal valuta i utlandet, 25 på flybilletter på sas.no** (saseurobonusmastercard.no, skjermbilde 2026-11-17; Anneli oppga først 25). Kolonnen er ikke merket i skjermbildet, Premium antas å være høyre kolonne | 25 % av månedens opptjente bonuspoeng på kortet (4800 → 1200), minimum 500 i måneder kortet brukes, ingen årlig grense. Beregnes **månedlig**, ikke per kjøp. | Delvis: nivåregelen fra SAS Mastercard-siden (skjermbilde 2026-11-17), bonussats ikke |
 | SAS Amex Classic/Premium | ukjent | ukjent | Nei |
 | BillKill/Betalo | ukjent | ukjent | Nei |
@@ -43,17 +43,35 @@ Status per 2026-11-11. **Alle satser her må verifiseres mot offisielle kilder (
 
     Siden sier «samlet poengsaldo i EuroBonus de siste 12 månedene», mens vilkårene sier «opptjening». Må avklares.
 
-## Testtabell (skal fylles ut og verifiseres)
+## Testtabell (regnet for hånd, skal kontrolleres av Anneli)
 
-Kjøp er oppdiktede. «Forventet» regnes ut for hånd fra verifiserte satser, ikke fra koden. Avrundingsregel (per kjøp, per 100 kr, ned/opp) må avklares og dokumenteres her.
+Kjøp er oppdiktede. «Forventet» er regnet ut for hånd fra satsene i dette vedlegget, ikke fra koden. Satsene er delvis verifisert (se øverst), så tabellen er `[VERIFISER]` til de er kontrollert mot offisielle kilder.
 
-| # | Kjøp | Kort | Forventet bonus (kort) | Forventet nivå (kort) | Forventet Trumf | Kilde for sats |
+**Avrundingsregel (valgt 2026-11-24, `[VERIFISER]`):**
+- Kortpoeng: beløp (i øre) × sats per 100 kr ÷ 10 000, deretter rundet **ned** til hele poeng. Regnes per kjøp og per kilde, ikke per 100 kr-blokk. Eksempel: 450 kr med Mastercard Premium gir 67 (67,5 rundet ned).
+- Trumf: Trumf-bonus (1 % eller 3 % av beløpet) rundes ned til hele øre. Trumf-poeng = Trumf-kroner × 13,5, rundet **ned** til hele poeng.
+- Butikker utenfor de ni Trumf-butikkene gir 0 Trumf-poeng, men kortpoeng regnes.
+- Nivåpoeng er ikke med i v1 og er derfor ikke i tabellen.
+
+| # | Kjøp | Kort | Forventet kortpoeng | Trumf-kroner | Forventet Trumf-poeng | Sum |
 |---|---|---|---|---|---|---|
-| 1 | 450 kr, Kiwi | SAS Amex Elite | 90 | 27 | TBD | TBD |
-| 2 | 450 kr, Kiwi | SAS Mastercard (std.) | 45 | 0 | TBD | TBD |
-| 3 | 99 kr, Rema 1000 | SAS Amex Elite | TBD (avrunding) | TBD | TBD | TBD |
-| 4 | 1 000 kr, Coop Extra | SAS Mastercard (std.) | 100 | 0 | TBD | TBD |
-| 5–15 | TBD: ulike beløp, med/uten Trumf, grensetilfeller (0 kr, svært høyt beløp, kort uten nivåpoeng) | | | | | |
+| 1 | 450 kr, KIWI, vanlig dag | Amex Elite | 90 | 4,50 | 60 | 150 |
+| 2 | 450 kr, KIWI, vanlig dag | Mastercard Premium | 67 | 4,50 | 60 | 127 |
+| 3 | 450 kr, KIWI, Trippel-Trumf-dag | Mastercard Premium | 67 | 13,50 | 182 | 249 |
+| 4 | 99 kr, KIWI, vanlig dag | Amex Elite | 19 | 0,99 | 13 | 32 |
+| 5 | 99 kr, KIWI, vanlig dag | Mastercard Premium | 14 | 0,99 | 13 | 27 |
+| 6 | 99 kr, Rema 1000 (ikke Trumf) | Amex Elite | 19 | 0,00 | 0 | 19 |
+| 7 | 1 000 kr, Coop Extra (ikke Trumf) | Mastercard Premium | 150 | 0,00 | 0 | 150 |
+| 8 | 1 000 kr, MENY, vanlig dag | Amex Elite | 200 | 10,00 | 135 | 335 |
+| 9 | 1 000 kr, MENY, Trippel-Trumf-dag | Mastercard Premium | 150 | 30,00 | 405 | 555 |
+| 10 | 0 kr, KIWI (grensetilfelle) | Amex Elite | 0 | 0,00 | 0 | 0 |
+| 11 | 1 kr, KIWI (grensetilfelle) | Amex Elite | 0 | 0,01 | 0 | 0 |
+| 12 | 12 345,67 kr, SPAR (høyt beløp) | Mastercard Premium | 1851 | 123,45 | 1666 | 3517 |
+| 13 | 250 kr, Joker, Trippel-Trumf-dag | Amex Elite | 50 | 7,50 | 101 | 151 |
+| 14 | 575 kr, Jacob's, vanlig dag | Mastercard Premium | 86 | 5,75 | 77 | 163 |
+| 15 | 5 000 kr, Gigaboks, vanlig dag | Amex Elite | 1000 | 50,00 | 675 | 1675 |
+
+Rad 1–3 er eksemplene fra PRD (FR-13 og FR-14). Rad 4–5 viser avrunding, rad 6–7 butikker uten Trumf, rad 10–11 grensetilfeller, rad 12 høyt beløp.
 
 ## Akseptanse (oppgitt av Anneli 2026-11-17, ikke verifisert)
 
@@ -62,25 +80,25 @@ Kjøp er oppdiktede. «Forventet» regnes ut for hånd fra verifiserte satser, i
 ## Trumf (trumf.no, skjermbilde fra Anneli 2026-11-17)
 
 - Grunnbonus: 1 % Trumf-bonus med fysisk eller digitalt Trumf-kort.
-- Trippel-Trumf-torsdag: +2 %, totalt 3 %, når Trumf-kortet skannes før betaling.
+- Trippel-Trumf-dag: +2 %, totalt 3 %, når Trumf-kortet skannes før betaling.
 - Ingen Trumf-bonus med digitalt Trumf-kort hos Esso.
 - V1 begrenses til NorgesGruppen-butikker, selv om Trumf gir bonus i over 250 butikker.
 
-**Utledede eksempler (ikke verifisert, avrunding avklares):** 100 kr gir 1 Trumf-krone, altså 13,5 EuroBonus-poeng. På Trippel-Trumf-torsdag gir 100 kr 3 Trumf-kroner, altså 40,5 poeng.
+**Utledede eksempler (ikke verifisert, avrunding avklares):** 100 kr gir 1 Trumf-krone, altså 13,5 EuroBonus-poeng. På Trippel-Trumf-dag gir 100 kr 3 Trumf-kroner, altså 40,5 poeng.
 
 | Kjøp | Kort | Kortpoeng | Trumf-kroner | Trumf-poeng | Sum |
 |---|---|---|---|---|---|
 | 450 kr, Kiwi, vanlig dag | Mastercard Premium (15 per 100 kr) | 67,5 | 4,5 | 60,75 | 128,25 |
 | 450 kr, Kiwi, vanlig dag | Amex Elite (20 per 100 kr) | 90 | 4,5 | 60,75 | 150,75 |
-| 450 kr, Kiwi, Trippel-Trumf-torsdag | Mastercard Premium | 67,5 | 13,5 | 182,25 | 249,75 |
+| 450 kr, Kiwi, Trippel-Trumf-dag | Mastercard Premium | 67,5 | 13,5 | 182,25 | 249,75 |
 
-200 Trumf-kroner tilsvarer 2 700 EuroBonus-poeng per overføring, og nås ved 20 000 kr forbruk (6 667 kr på torsdager).
+200 Trumf-kroner tilsvarer 2 700 EuroBonus-poeng per overføring, og nås ved 20 000 kr forbruk (6 667 kr på Trippel-Trumf-dager).
 
 ## Oppdatering 2026-11-17 (oppgitt av Anneli og trumf.no, ikke verifisert)
 
 **Butikker med Trumf-bonus (trumf.no, skjermbilde):** MENY, KIWI, SPAR, Joker, CC Mat, Jacob's, Lerøy Mat, Nærbutikken, Gigaboks, Mester Grønn (ikke nettbutikk), Norli (ikke nettbutikk), Esso (kun fysisk Trumf-kort). V1 er avgrenset til dagligvarer/NorgesGruppen-butikker. Hvilke av disse som er med, avklares.
 
-**Trippel-Trumf-dager:** kommer uregelmessig, ca. hver 3.–4. uke, ikke hver torsdag. Eksemplet «torsdag» i tabellene over betyr «Trippel-Trumf-dag».
+**Trippel-Trumf-dager:** kommer uregelmessig, ca. hver 3.–4. uke, ikke hver torsdag. Tabellene bruker «Trippel-Trumf-dag».
 
 **Companion Ticket:** gjelder kalenderår. Billett opptjent i 2026 utløper 31.12.2027.
 

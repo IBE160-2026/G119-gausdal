@@ -67,7 +67,7 @@ graph LR
 
 - **Binds:** FR-13, FR-14, FR-17, NFR-8, SK-1
 - **Prevents:** flyttallsfeil og ulik avrunding i to deler av appen, som kan overestimere poeng
-- **Rule:** Beløp lagres som heltall i øre. Poeng og Trumf-poeng er heltall. All avrunding gjøres i `domain/`, alltid nedover. Ingen andre lag runder av eller regner poeng.
+- **Rule:** Beløp lagres som heltall i øre. Poeng og Trumf-poeng er heltall. All avrunding gjøres i `domain/`, alltid nedover. Kortpoeng = beløp i øre × sats per 100 kr ÷ 10 000, rundet ned per kjøp og kilde (ikke per 100 kr-blokk). Trumf-bonus rundes ned til hele øre, og Trumf-poeng (× 13,5) rundes ned til hele poeng. Ingen andre lag runder av eller regner poeng.
 
 ### AD-6 — Poengtransaksjoner er lagret fasit per kjøp og kilde `[ASSUMPTION]`
 

@@ -1,6 +1,6 @@
 ---
 status: draft
-stepsCompleted: [1, 2]
+stepsCompleted: [1, 2, 3, 4]
 inputDocuments:
   - _bmad-output/planning-artifacts/prds/prd-G119-gausdal-2026-11-12/prd.md
   - _bmad-output/planning-artifacts/prds/prd-G119-gausdal-2026-11-12/addendum.md
@@ -163,9 +163,9 @@ So that jeg ser at den kjører uten å sette opp noe selv.
 
 **Acceptance Criteria:**
 
-**Given** en ren maskin med Docker og repoet klonet
+**Given** en ren maskin med Docker og repoet klonet, og prosjektet satt opp fra Next.js 16 (App Router, TypeScript) med Prisma, Better Auth og Vitest (AR-1)
 **When** jeg kjører `docker compose up`
-**Then** app og PostgreSQL starter, Prisma-migreringer kjøres, og en startside svarer på `http://localhost:3000`
+**Then** app og PostgreSQL starter, Prisma-migreringer kjøres, og en enkel Hjem-side svarer på `http://localhost:3000`
 **And** `.env.example` finnes med alle variabelnavn og ingen verdier, og `.env` er i `.gitignore` (AR-10, NFR-6)
 
 **Given** prosjektet er satt opp
@@ -176,6 +176,7 @@ So that jeg ser at den kjører uten å sette opp noe selv.
 **When** en fil der importerer fra `src/app/`, Prisma, eller bruker `fetch` eller `Date.now()`
 **Then** lint feiler (AR-2)
 
+**And** et tomt grensesnitt for fillagring finnes i `src/app/storage/` med lokal mappe som standard, og ingen filer lagres i v1 (AR-9, NFR-5)
 **And** mappestrukturen følger ryggraden (`src/domain/`, `src/app/`, `prisma/`, `tests/`, `docs/`), og README har en første versjon med oppstartskommandoene (AR-13)
 
 ### Story 1.2: Tema og navigasjonsskall
@@ -187,9 +188,10 @@ So that jeg finner frem uten å tenke.
 **Acceptance Criteria:**
 
 **Given** appen åpnes på mobil
-**When** jeg ser en innlogget side
+**When** jeg ser en side i appen
 **Then** nedre fane viser Hjem, Før kjøp, Kjøp og Meg, med innholdet i én kolonne og maks 480 px bredde (UX-DR3)
 **And** farger, typografi, spacing og avrunding kommer fra tokens i én temafil (UX-DR1)
+**And** all tekst i grensesnittet er på norsk (NFR-7)
 
 **Given** systemet står i mørk modus
 **When** jeg åpner appen
@@ -267,6 +269,10 @@ So that fremgangen min har et utgangspunkt.
 **When** jeg oppgir bonuspoeng i dag, poeng siste 12 måneder, Amex-forbruk hittil i kalenderåret og Trumf-kroner siden siste overføring
 **Then** verdiene lagres som heltall (poeng) og øre (beløp) (FR-4, AR-5)
 **And** tallfelt åpner talltastatur med komma, og ugyldige verdier gir en forståelig feil knyttet til feltet (UX-DR13, UX-DR15)
+
+**Given** tabellene for mål og startverdier ikke finnes
+**When** historien er ferdig
+**Then** de er opprettet via Prisma-migrering (AR-3)
 
 **Given** oppsettet er fullført
 **When** jeg trykker Ferdig
@@ -404,6 +410,7 @@ So that jeg ser at stablingen virker.
 **Given** jeg lagrer
 **When** kjøpet er gyldig
 **Then** `Kjop` og én `Poengtransaksjon` per kilde (kort og Trumf) lagres i én databasetransaksjon, med `sats_id` (AR-6)
+**And** Trumf-transaksjonen lagrer også Trumf-kroner i øre, slik at Story 3.1 kan regne overføring
 **And** tabellene opprettes i denne historien med Prisma-migrering
 
 **Given** kjøpet er lagret

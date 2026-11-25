@@ -85,3 +85,80 @@ med testbrukeren står fortsatt.
   `/oppsett` via et ekte knappetrykk — bekreftet strukturelt og via `curl`, ikke klikket gjennom.
 - Sette `1-3-opprette-konto-og-logge-inn-og-ut` til `done` i spec-en og `sprint-status.yaml`
   når Anneli har bekreftet manuelt i nettleser (samme mønster som Story 1.2).
+
+## 2026-11-25 kl. 19:40 — Anneli Gausdal
+
+### Oppgave
+
+Fullføre resten av `bmad-build` for Story 1.3: tre parallelle kodegjennomganger av diffen,
+triage av funnene, retting, re-verifisering, og landing i små commits med AR-/AD-/UX-DR-ID.
+
+### Plan
+
+- Kjørte `blind-hunter`, `edge-case-hunter` og `verification-gap` parallelt mot diffen siden
+  baseline-commiten (4527302).
+- Vurderte hvert av de 19 funnene selv — verifiserte to usikre påstander direkte mot den
+  installerte `better-auth`-kildekoden i stedet for å gjette (se Resultat), og bekreftet
+  verification-gaps CSS-funn selv ved å lese koden.
+- Sendte de 7 rettbare funnene tilbake til samme implementeringsagent (gjenengasjert via id);
+  verifiserte rettingen på nytt selv, inkludert en ny `docker compose restart` for å reprodusere
+  en reell omstart.
+- Committet i 7 små commits iht. brukerens eksplisitte instruks.
+
+### Resultat
+
+**Review:** 3 reviewere fant 19 enkeltfunn (11 blind-hunter, 5 edge-case-hunter, 3
+verification-gap — én overlapp mellom de to siste). Etter egen verifisering: 7 rettet (patch),
+4 utsatt til `deferred-work.md`, 2 avvist som `false` (bevist mot `better-auth`s kildekode: e-post
+normaliseres med `.toLowerCase()` i `sign-up.mjs`/`sign-in.mjs`; rate-limiting er på by default
+når `NODE_ENV=production`, som Dockerfilens runtime-steg setter), 1 avvist som «by design» (en
+allerede godkjent AD-11-boundary). Full liste med bevis i spec-filens `## Review Triage Log`.
+
+**Rettet, alle verifisert av meg på nytt (ikke bare agentens rapport):**
+- Dobbel sidemarg på Hjem/Før kjøp/Kjøp/Meg — rotlayouten hadde sin egen `.skall-innhold`-div
+  OG `(app)/layout.tsx` la til en ny, nestet inni den. Fikset ved å fjerne wrapperen fra
+  rotlayouten og legge `className="skall-innhold"` direkte på `<main>` i `logg-inn`/
+  `opprett-konto`/`oppsett`. Bekreftet med `curl` mot en kjørende container: nøyaktig én
+  `skall-innhold`-klasse per side nå (var to).
+- Ny test `tests/krev-sesjon.test.ts` for sesjonsvaktens eneste beslutning (redirect vs.
+  returner sesjon), med `auth.api.getSession`/`redirect` mocket — ingen database/nettverk.
+- `krev-sesjon.ts` fail-closed: try/catch rundt `getSession`, redirect til `/logg-inn` på feil.
+- `logg-inn`/`opprett-konto`: try/catch rundt `authClient.signIn/signUp.email` så en uventet
+  nettverksfeil ikke lar "venter"-tilstanden stå fast uten tilbakemelding.
+- `meg/page.tsx`: try/catch/finally rundt `authClient.signOut()` så "Logg ut"-knappen aldri kan
+  sitte fast, og navigasjon skjer uansett utfall (neste sides `krevSesjon()` sjekker ekte
+  sesjonstilstand uavhengig).
+- `prisma/seed.ts`: byttet `findUnique`+`create` til én atomisk `create()` som fanger Prisma-feil
+  P2002 (unik-constraint) — ikke et kappløp lenger. Bekreftet med `docker compose restart app`
+  mot den kjørende containeren: seed-loggen viser "finnes allerede" på ekte omstart, ingen krasj.
+- `config.ts`: `BETTER_AUTH_SECRET` sjekkes nå for minstelengde (32 tegn, Better Auths eget
+  dokumenterte minimum).
+
+**Fant og rettet en feil i min egen commit-splitting:** de tre gamle rutefilene (`src/app/page.tsx`,
+`for-kjop/page.tsx`, `kjop/page.tsx`) ble flyttet med `git mv`, men da jeg delte opp
+commit-en i flere pathspec-begrensede commits, listet jeg bare de NYE stiene under `(app)/` —
+slettingen av de GAMLE stiene ble aldri inkludert i noen commit-pathspec, så de ble stående i
+git-historien som duplikate rutefiler i tre mellomliggende commits. Fanget opp ved
+`git status -s` etter siste commit (viste fortsatt `D`-linjer); rettet med en egen
+oppfølgingscommit (`dc939a4`) og bekreftet med `git ls-tree -r HEAD` at ingen duplikater finnes
+i nåværende HEAD.
+
+**Commits** (7 stk, i `claude/eager-carson-eldvjj`): `a9afc85` (Prisma/DB, AD-3/AR-8),
+`db4e373` (Better Auth-server/sesjonsvakt, FR-1/AR-8), `ea2cf69` (offentlige sider, FR-1/UX-DR13),
+`1516de1` (beskyttet rutegruppe, AR-8/UX-DR3), `2d3f69b` (seed/Docker/README, AD-11/NFR-6/AR-8),
+`724f857` (spec/triage/sprint-status, AD-12), `dc939a4` (fullfør flytting — fjernet de gamle
+rutefilene fra git, AR-8/UX-DR3).
+
+`npm run lint`/`test`/`build` grønt etter retting (5/5 tester, inkl. ny `krev-sesjon.test.ts`).
+Spec-filens status er `done`; `sprint-status.yaml` har story-nøkkelen på `review` (ikke `done`)
+— venter på Annelis egen manuelle nettleser-bekreftelse, se forrige seksjons åpne punkt.
+
+### Åpne punkter
+
+- Uendret fra forrige seksjon: manuell nettleser-bekreftelse av skjemaene og
+  `/opprett-konto` → `/oppsett`-navigasjonen gjenstår.
+- 4 funn utsatt til `deferred-work.md` (retur-til-forespurt-side etter innlogging; bredere
+  automatisert testdekning for auth-flytene; automatisert test av seed-idempotens; vurdering av
+  produksjonshemmeligheter ved publisering) — ingen av dem blokkerer Story 1.3.
+
+Speiles i `issues.md`.

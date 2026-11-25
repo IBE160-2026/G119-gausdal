@@ -35,6 +35,9 @@ services:
       # .env overstyrer.
       DATABASE_URL: ${DATABASE_URL:-postgresql://${POSTGRES_USER:-g119}:${POSTGRES_PASSWORD:-g119}@db:5432/${POSTGRES_DB:-g119}}
       STORAGE_DIR: ${STORAGE_DIR:-/app/storage}
+      # AR-8 / AD-10: lokal standardverdi, samme mønster som POSTGRES_PASSWORD.
+      BETTER_AUTH_SECRET: ${BETTER_AUTH_SECRET:-g119-lokal-utvikling-hemmelighet-ikke-bruk-i-prod}
+      BETTER_AUTH_URL: ${BETTER_AUTH_URL:-http://localhost:3000}
       PORT: '3000'
     ports:
       - '3000:3000'

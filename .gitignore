@@ -13,6 +13,9 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
+# AD-9: lokal fillagring (standard i v1 er ./storage, uten innhold ennå)
+/storage/
+
 # Python environments, bytecode, packaging and caches
 .venv/
 venv/

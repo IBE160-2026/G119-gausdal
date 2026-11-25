@@ -32,3 +32,4 @@
 
 - [ ] 2026-11-25 [prosjektoppsett-story-1-1](996-2026-11-25-14-49-10-prosjektoppsett-story-1-1.md) — kjøre `docker compose up` live på en maskin med Docker daemon for å bekrefte at Postgres, migrering og appen faktisk starter sammen (ikke mulig i sandbox uten daemon)
 - [ ] 2026-11-25 [prosjektoppsett-story-1-1](996-2026-11-25-14-49-10-prosjektoppsett-story-1-1.md) — bekrefte at håndskrevet tom migrering (`prisma/migrations/20261125000000_init/migration.sql`) faktisk kan anvendes av `prisma migrate deploy` mot en levende database
+- [ ] 2026-11-25 [prosjektoppsett-story-1-1](996-2026-11-25-14-49-10-prosjektoppsett-story-1-1.md) — lint-grensen for `src/domain/` (AD-2) dekker ikke all aliasing (f.eks. `const n = Date.now; n()`); lav prioritet, vurder i en senere story

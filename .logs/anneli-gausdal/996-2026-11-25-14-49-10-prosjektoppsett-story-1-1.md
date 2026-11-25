@@ -80,3 +80,76 @@ Ingen commit er gjort av selve implementasjonen — venter på bruker.
   implementeringsarbeidet.
 
 Speiles i `issues.md`.
+
+## 2026-11-25 kl. 15:10 — Anneli Gausdal
+
+### Oppgave
+Fortsette `bmad-build` for Story 1.1 etter forrige økts implementering: kjøre review-steget
+(tre uavhengige kodegjennomganger), triagere funnene, rette det som var reelt, verifisere alt
+selv, og lande arbeidet i små commits merket med AR-/AD-ID (eksplisitt bedt om av brukeren).
+
+### Plan
+- Kjøre `blind-hunter`, `edge-case-hunter` og `verification-gap`-reviewerne parallelt mot
+  diffen siden baseline-commiten.
+- Verifisere hvert funn selv mot faktisk kode/kjørte kommandoer (ikke stole på reviewernes
+  påstander) og gi hver ett av: high/medium/low/false/maybe-false.
+- Sende de reelle, rettbare funnene tilbake til implementeringsagenten som én samlet
+  patch-liste; la agenten gjøre minimal retting; verifisere på nytt selv.
+- Committe i små, AR-/AD-ID-merkede commits (ikke én stor commit), siden brukeren ba om det.
+- Plandokument: ingen eget — fulgte `bmad-build`s innebygde step-04-review.md/step-05-present.md.
+
+### Resultat
+**Review:** 3 reviewere fant totalt 18 enkeltfunn (14 fra blind-hunter, 9 fra edge-case-hunter
+— noen overlappet —, 1 fra verification-gap). Etter selvstendig verifisering (lest kode, kjørt
+`npm test`/`lint`/`build`/`docker compose config`, og reprodusert flere funn direkte med
+testfiler i `src/domain/`) endte triagen med 8 reelle funn som ble rettet, og 10 forkastet som
+`false`/uutløselig/utenfor scope (se `## Review Triage Log` i spec-filen for alle 18 rader med
+verdikt og bevis).
+
+**Rettet (patch), alle verifisert av meg etter retting:**
+- `Dockerfile`: `prisma generate` i build-stage hadde ingen `DATABASE_URL` tilgjengelig
+  (ingen `.env` i build-konteksten) — reprodusert at `docker build` ville feilet før Postgres/
+  migrering/app i det hele tatt ble nådd. Fikset med en plassholder-`ARG`/`ENV` før
+  `RUN npx prisma generate`.
+- `src/app/config.ts`: `lesPakrevd`/`lesValgfri` sjekket `.trim()` men returnerte den
+  utrimmede verdien — fikset til å returnere den trimmede strengen.
+- `docker-compose.yml`: `DATABASE_URL`/`STORAGE_DIR` for `app`-tjenesten var hardkodet og
+  ignorerte verdier satt i `.env`, i strid med READMEs eget løfte — fikset til
+  `${VAR:-standardverdi}`-mønster, samme som `db`-tjenesten allerede brukte.
+- `docker-compose.yml`: Postgres-porten var publisert på alle grensesnitt med svakt
+  standardpassord — bundet til `127.0.0.1:5432:5432`.
+- `Dockerfile`: ingen `USER`-direktiv (kjørte som root) — lagt til egen, ikke-root bruker i
+  runtime-stage.
+- `package.json`: `"allowScripts"`-feltet var ikke en reell npm-funksjon (forrige økts logg
+  beskrev det feilaktig som nødvendig for Prisma — det var dødt, gjorde ingenting) — fjernet.
+- `.dockerignore`: manglet `tests` — lagt til (kosmetisk, nådde aldri runtime-imaget).
+- `eslint.config.mjs`: AD-2-grensen for `src/domain/` kunne omgås med dynamisk `import()`,
+  `require()` eller `const { env } = process` — reprodusert at alle tre ga 0 lint-feil før
+  fiks; lagt til tre nye `no-restricted-syntax`-regler, reprodusert at alle tre nå feiler
+  lint med AD-2-henvisning.
+
+**Forkastet (false/utenfor scope), ikke rettet — se triage-loggen for full begrunnelse:**
+bl.a. manglende Prisma-klient-singleton (eksplisitt utenfor scope i frosset Intent),
+path-traversal i `src/app/storage/lokal-lagring.ts` (uutløselig — ingen kaller finnes, og
+«ingen filer lagres i v1» er et frosset krav), manglende `@/`-alias i `vitest.config.ts`
+(ingen test bruker aliaset i dag), og et par lav-prioriterte Docker-hygienepunkter
+(devDependencies i prod-image, manglende healthcheck på `app`) der fiksen ville vært mer enn
+en direkte rettelse.
+
+**Commits** (8 stk, i `claude/eager-carson-eldvjj`):
+`815e327` (AR-1), `0f363a7` (AR-11/AR-2/AD-2/AD-11), `58665bb` (AR-3), `048607b` (AR-10/AD-10),
+`39a3e12` (AR-9/AD-9), `72fcaf0` (AR-11/AD-11), `36b82ba` (AR-13), `0c49b50` (AD-12 —
+spec-status + triage-logg). Spec-filen (`spec-1-1-prosjektoppsett.md`) er `status: done`;
+`sprint-status.yaml` har story-nøkkelen på `review` (ikke `done` — venter på at `docker
+compose up` faktisk kjøres, se Åpne punkter).
+
+### Åpne punkter
+- Uendret fra forrige økt: `docker compose up` er fortsatt ikke kjørt live (ingen Docker-
+  daemon i dette miljøet) — hele kjeden Postgres → migrering → app på port 3000 må bekreftes
+  manuelt før historien kan settes til `done` i sprint-status. Se forrige punkt i denne fila.
+- Nytt: `eslint.config.mjs`s nye regler dekker ikke alle tenkelige omveier (f.eks.
+  `Date.now`-aliasing: `const n = Date.now; n()`) — vurdert og bevisst utelatt fra denne
+  patch-runden siden en fullgod fiks for all aliasing er mer enn en direkte rettelse; notert i
+  triage-loggen som lav prioritet.
+
+Speiles i `issues.md`.

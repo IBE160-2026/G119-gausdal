@@ -39,3 +39,6 @@
 
 - [x] 2026-11-25 [opprette-konto-og-logge-inn-og-ut](994-2026-11-25-19-05-52-opprette-konto-og-logge-inn-og-ut.md) — Anneli: åpne `/opprett-konto` og `/logg-inn` i en ekte nettleser og bekrefte skjema, feltfeil og at opprett-konto faktisk sender til `/oppsett` (løst 2026-11-25: Anneli bekreftet selv i nettleser)
 - [x] 2026-11-25 [opprette-konto-og-logge-inn-og-ut](994-2026-11-25-19-05-52-opprette-konto-og-logge-inn-og-ut.md) — sette `1-3-opprette-konto-og-logge-inn-og-ut` til `done` i spec-filen og `sprint-status.yaml` når Anneli har bekreftet manuelt i nettleser (løst 2026-11-25: sprint-status satt til done)
+
+- [ ] 2026-11-25 [velge-kort-trumf-og-type-bonusreiser](993-2026-11-25-22-55-00-velge-kort-trumf-og-type-bonusreiser.md) — Anneli: åpne `/oppsett` i en ekte nettleser, bekreft avkrysningsbokser/Trumf-/SkyTeam-radioknapper, feilmeldingen ved lagring uten kort, og at valg faktisk forhåndsutfylles ved gjenbesøk
+- [ ] 2026-11-25 [velge-kort-trumf-og-type-bonusreiser](993-2026-11-25-22-55-00-velge-kort-trumf-og-type-bonusreiser.md) — sette `1-4-velge-kort-trumf-og-type-bonusreiser` til `done` i spec-filen og `sprint-status.yaml` når Anneli har bekreftet manuelt i nettleser (review-runde gjenstår også, se spec-filens Review Triage Log)

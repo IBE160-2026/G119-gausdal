@@ -187,3 +187,25 @@ spec-en er nå bekreftet oppfylt.
 ### Åpne punkter
 Ingen igjen fra Story 1.1 — begge punktene fra forrige økt (`docker compose up` live og
 migreringen) er løst og lukket i `issues.md`.
+
+## 2026-11-25 kl. 15:40 — Anneli Gausdal
+
+### Oppgave
+Bruker ba om å kjøre `docker compose up --build` på nytt i denne (nye) økten og bekreftet selv
+at stacken fungerer, som en uavhengig, personlig bekreftelse av akseptkriteriet som ble lukket
+i forrige økt (`## 2026-11-25 kl. 15:30`).
+
+### Plan
+- Kjøre `docker compose up --build` i bakgrunnen og lese byggelogg/containerstatus.
+- Ingen kodeendringer planlagt — ren re-verifisering.
+
+### Resultat
+Bygget fullførte (mesteparten cached fra forrige kjøring i dette miljøet), image
+`g119-gausdal-app:latest` oppdatert. `g119-gausdal-db-1` ble `Healthy`, `g119-gausdal-app-1`
+kjører. Bruker bekreftet selv 2026-11-25 at oppsettet fungerer. Ingen kodeendringer og ingen
+ny commit av selve appen — kun en gjentatt, brukerbekreftet verifisering av samme
+akseptkriterium. Notatet på det allerede lukkede punktet i `issues.md` er utvidet med denne
+bekreftelsen.
+
+### Åpne punkter
+Ingen.

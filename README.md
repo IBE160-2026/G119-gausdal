@@ -21,12 +21,25 @@ Ingen nøkler eller nettverkstilgang er nødvendig for å starte appen eller kj�
 docker compose up
 ```
 
-Dette starter PostgreSQL og appen, kjører databasemigreringer automatisk, og
-Hjem er tilgjengelig på <http://localhost:3000>. Mangler `.env`, brukes
+Dette starter PostgreSQL og appen, kjører databasemigreringer og seed
+automatisk, og innlogging er tilgjengelig på <http://localhost:3000>
+(uinnlogget sendes du til `/logg-inn`). Mangler `.env`, brukes
 standardverdier for lokal utvikling (satt i `docker-compose.yml`) — appen
 krasjer ikke.
 
 Skal du sette egne verdier, kopier `.env.example` til `.env` og fyll inn.
+
+### Testbruker (NFR-6)
+
+Seed-skriptet (`prisma/seed.ts`) oppretter denne oppdiktede testbrukeren
+automatisk hver gang `docker compose up` kjører (idempotent — oppretter den
+ikke på nytt hvis den finnes):
+
+- E-post: `petter@eksempel.test`
+- Passord: `kiwi-trumf-1808`
+
+Logg inn med disse opplysningene på <http://localhost:3000/logg-inn>, eller
+opprett en ny konto på `/opprett-konto`.
 
 ## Kjøre tester
 

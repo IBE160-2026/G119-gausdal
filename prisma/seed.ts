@@ -61,7 +61,29 @@ async function main() {
   }
 }
 
+// Story 1.4 / AR-3: kortkatalogen (Amex Elite, Mastercard Premium) seedes
+// idempotent med samme `upsert`-mønster som README nevner som alternativ til
+// testbrukerens `create` + fang-P2002-mønster — `upsert` på `kode` er enklere
+// her siden radene ikke har noe å kollidere med utover unik-constrainten.
+const KORT_SEED = [
+  { kode: 'amex-elite', navn: 'Amex Elite' },
+  { kode: 'mastercard-premium', navn: 'Mastercard Premium' },
+] as const;
+
+async function seedKort() {
+  for (const kort of KORT_SEED) {
+    await db.kort.upsert({
+      where: { kode: kort.kode },
+      update: { navn: kort.navn },
+      create: { kode: kort.kode, navn: kort.navn },
+    });
+  }
+
+  console.log('Seed: kortkatalogen (Amex Elite, Mastercard Premium) er oppdatert.');
+}
+
 main()
+  .then(seedKort)
   .catch((error) => {
     console.error('Seed feilet:', error);
     process.exitCode = 1;

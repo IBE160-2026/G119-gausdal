@@ -24,6 +24,12 @@ model User {
   updatedAt     DateTime  @updatedAt
   sessions      Session[]
   accounts      Account[]
+  // Story 1.4: håndlagte back-relation-felt. better-auths Prisma-generator
+  // (npx auth generate) oppdager og bevarer disse ved en senere re-kjøring
+  // (PR better-auth/better-auth#12896, inkludert i better-auth@1.7.28 — se
+  // spec-1-4 Boundaries).
+  brukerKort    BrukerKort[]
+  brukerProfil  BrukerProfil?
 
   @@unique([email])
   @@map("user")
@@ -75,4 +81,43 @@ model Verification {
 
   @@index([identifier])
   @@map("verification")
+}
+
+// Story 1.4: kortkatalog (seedet, ikke brukerredigerbar). Stabilt `kode`-felt
+// for seed/oppslag i tillegg til UUID `id` (AD-konvensjon).
+model Kort {
+  id         String       @id @default(uuid())
+  kode       String       @unique
+  navn       String
+  brukerKort BrukerKort[]
+
+  @@map("kort")
+}
+
+// Story 1.4: hvilke kort brukeren har valgt. Erstattes helt (ikke merges) ved
+// ny lagring fra oppsett — se spec-1-4 Boundaries/Edge-Case Matrix.
+model BrukerKort {
+  id        String   @id @default(uuid())
+  brukerId  String
+  bruker    User     @relation(fields: [brukerId], references: [id], onDelete: Cascade)
+  kortId    String
+  kort      Kort     @relation(fields: [kortId], references: [id])
+  createdAt DateTime @default(now())
+
+  @@unique([brukerId, kortId])
+  @@map("bruker_kort")
+}
+
+// Story 1.4: Trumf/SkyTeam-svarene fra oppsett. Utvides av Story 1.5 med
+// startverdier-feltene (se spec-1-4 Code Map).
+model BrukerProfil {
+  id          String   @id @default(uuid())
+  brukerId    String   @unique
+  bruker      User     @relation(fields: [brukerId], references: [id], onDelete: Cascade)
+  trumfKoblet Boolean
+  kunSas      Boolean
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("bruker_profil")
 }

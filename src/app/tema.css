@@ -1,0 +1,160 @@
+/*
+ * Temafil — eneste sted farger, typografi, spacing og avrunding defineres som
+ * CSS-variabler (UX-DR1). Andre filer skal referere disse variablene, aldri
+ * hardkodede verdier. Kilde: DESIGN.md.
+ *
+ * Lys modus er standard. Mørk modus styres av systeminnstillingen
+ * `prefers-color-scheme: dark` (UX-DR2) — ingen manuell knapp.
+ */
+
+:root {
+  /* Farger — lys (standard) */
+  --farge-surface-base: #ECEEF0;
+  --farge-surface-raised: #FFFFFF;
+  --farge-ink-primary: #1B1F24;
+  --farge-ink-secondary: #58606A;
+  --farge-ink-disabled: #9AA1AA;
+  --farge-border-hairline: #D3D7DC;
+  --farge-accent: #2F5D8C;
+  --farge-accent-soft: #E0E9F2;
+  --farge-on-accent: #FFFFFF;
+  --farge-pending: #8E98A4;
+  --farge-uncertain: #8A5A00;
+  --farge-uncertain-soft: #FFF1D6;
+  --farge-danger: #B3261E;
+
+  /* Typografi */
+  --font-family-base: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+
+  --font-size-display: 2rem;
+  --font-weight-display: 700;
+  --line-height-display: 2.25rem;
+
+  --font-size-title: 1.25rem;
+  --font-weight-title: 600;
+  --line-height-title: 1.625rem;
+
+  --font-size-body: 1rem;
+  --font-weight-body: 400;
+  --line-height-body: 1.5rem;
+
+  --font-size-meta: 0.875rem;
+  --font-weight-meta: 400;
+  --line-height-meta: 1.25rem;
+
+  /* Spacing-skala */
+  --spacing-1: 4px;
+  --spacing-2: 8px;
+  --spacing-3: 12px;
+  --spacing-4: 16px;
+  --spacing-5: 24px;
+  --spacing-6: 32px;
+  --spacing-margin-mobile: var(--spacing-4);
+  --spacing-tap-min: 48px;
+
+  /* Avrunding */
+  --rounded-sm: 8px;
+  --rounded-md: 14px;
+  --rounded-full: 9999px;
+
+  /* Nedre fanelinje: trykkflate (tap-min) + nav sin egen topp/bunn-padding (spacing-1 × 2) */
+  --nedre-navigasjon-hoyde: calc(var(--spacing-tap-min) + 2 * var(--spacing-1));
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --farge-surface-base: #14171B;
+    --farge-surface-raised: #1E2227;
+    --farge-ink-primary: #EDEFF1;
+    --farge-ink-secondary: #A8AFB8;
+    --farge-ink-disabled: #636B75;
+    --farge-border-hairline: #2E343B;
+    --farge-accent: #7FAEDB;
+    --farge-accent-soft: #1F2E3D;
+    --farge-on-accent: #101418;
+    --farge-pending: #707B88;
+    --farge-uncertain: #F0B955;
+    --farge-uncertain-soft: #3A2D10;
+    --farge-danger: #F2B8B5;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--farge-surface-base);
+  color: var(--farge-ink-primary);
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-body);
+  font-weight: var(--font-weight-body);
+  line-height: var(--line-height-body);
+}
+
+h1 {
+  margin: 0 0 var(--spacing-4);
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-title);
+  font-weight: var(--font-weight-title);
+  line-height: var(--line-height-title);
+}
+
+/* Sentrert innholdskolonne, se src/app/layout.tsx */
+.skall-innhold {
+  max-width: 480px;
+  margin-inline: auto;
+  padding-inline: var(--spacing-margin-mobile);
+  /* Nok plass til at den faste nedre fanelinjen ikke dekker siste tekst. */
+  padding-bottom: calc(
+    var(--nedre-navigasjon-hoyde) + var(--spacing-5) + env(safe-area-inset-bottom, 0px)
+  );
+}
+
+/* Nedre fanelinje, se src/app/components/nedre-navigasjon.tsx */
+.nedre-navigasjon {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 10;
+  display: flex;
+  justify-content: space-around;
+  max-width: 480px;
+  margin-inline: auto;
+  background-color: var(--farge-surface-raised);
+  border-top: 1px solid var(--farge-border-hairline);
+  padding: var(--spacing-1) var(--spacing-2);
+  padding-bottom: calc(var(--spacing-1) + env(safe-area-inset-bottom, 0px));
+}
+
+.nedre-navigasjon__fane {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-1);
+  min-width: var(--spacing-tap-min);
+  min-height: var(--spacing-tap-min);
+  padding: var(--spacing-1) var(--spacing-1);
+  color: var(--farge-ink-secondary);
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-meta);
+  font-weight: var(--font-weight-meta);
+  line-height: var(--line-height-meta);
+  text-decoration: none;
+  border-radius: var(--rounded-sm);
+  text-align: center;
+}
+
+.nedre-navigasjon__fane[aria-current='page'] {
+  color: var(--farge-accent);
+  font-weight: var(--font-weight-title);
+}

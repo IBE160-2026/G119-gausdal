@@ -9,7 +9,10 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-g119}
       POSTGRES_DB: ${POSTGRES_DB:-g119}
     volumes:
-      - db-data:/var/lib/postgresql/data
+      # Postgres 18+ lagrer data i en versjons-spesifikk undermappe og krever
+      # ett mount på /var/lib/postgresql (ikke .../data) — se
+      # https://github.com/docker-library/postgres/issues/37.
+      - db-data:/var/lib/postgresql
     ports:
       - '127.0.0.1:5432:5432'
     healthcheck:

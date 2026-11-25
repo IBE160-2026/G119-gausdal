@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
+import './tema.css';
+import NedreNavigasjon from './components/nedre-navigasjon';
 
 export const metadata: Metadata = {
   title: 'EuroBonus Poeng-stacker',
@@ -9,7 +11,10 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="no">
-      <body>{children}</body>
+      <body>
+        <div className="skall-innhold">{children}</div>
+        <NedreNavigasjon />
+      </body>
     </html>
   );
 }

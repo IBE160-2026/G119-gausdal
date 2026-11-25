@@ -209,3 +209,22 @@ bekreftelsen.
 
 ### Åpne punkter
 Ingen.
+
+## 2026-11-25 kl. 15:44 — Anneli Gausdal
+
+### Oppgave
+Bruker kjørte `npm test` og `npm run lint` som ren verifisering etter at `docker compose up
+--build` ble bekreftet på nytt (forrige seksjon).
+
+### Plan
+- `npm test` og `npm run lint`, ingen kodeendringer.
+
+### Resultat
+`npm test`: 2 tester, 1 testfil, grønt. Vitest ga en advarsel om at `vitest.config.ts` bruker
+ESM-syntaks lastet som CommonJS (`configLoader: 'native'`-varselet) — kun en advarsel om en
+fremtidig Vite-default, påvirker ikke testresultatet, ingen fiks gjort.
+`npm run lint`: grønt, 0 feil/advarsler.
+Ingen filer endret, ingen commit av selve koden.
+
+### Åpne punkter
+Ingen.

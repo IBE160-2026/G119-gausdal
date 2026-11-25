@@ -164,3 +164,45 @@ h1 {
   color: var(--farge-accent);
   font-weight: var(--font-weight-title);
 }
+
+/* Story 1.4: bunnpadding for oppsett-flytens skjermer, som har en fast
+   "Neste"-knapp (.knapp-fast) i stedet for fanelinjen — samme
+   høydeformel som .skall-innhold--med-navigasjon bruker for
+   --nedre-navigasjon-hoyde, siden knappen er bygget med samme mål. */
+.skall-innhold--med-knapp-fast {
+  padding-bottom: calc(
+    var(--nedre-navigasjon-hoyde) + var(--spacing-5) + env(safe-area-inset-bottom, 0px)
+  );
+}
+
+/* Fast primærknapp nederst i oppsett-flyten, se
+   src/app/oppsett/oppsett-form.tsx. Samme faste posisjonering som
+   .nedre-navigasjon (DESIGN.md: "Primærknapp — fylt aksent, full bredde,
+   fast nederst i flyter"), men som én knapp i stedet for faner. */
+.knapp-fast {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 10;
+  display: block;
+  width: 100%;
+  max-width: 480px;
+  margin-inline: auto;
+  min-height: var(--spacing-tap-min);
+  padding: var(--spacing-1) var(--spacing-margin-mobile);
+  padding-bottom: calc(var(--spacing-1) + env(safe-area-inset-bottom, 0px));
+  border: none;
+  border-radius: 0;
+  background-color: var(--farge-accent);
+  color: var(--farge-on-accent);
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-body);
+  font-weight: var(--font-weight-title);
+  line-height: var(--line-height-body);
+}
+
+.knapp-fast:disabled {
+  background-color: var(--farge-ink-disabled);
+  color: var(--farge-on-accent);
+}

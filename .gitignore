@@ -8,6 +8,8 @@ build/
 .turbo/
 *.tsbuildinfo
 next-env.d.ts
+# Auto-generert av `next dev` (Next.js 16 agent-regler), ikke prosjektdokumentasjon
+AGENTS.md
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*

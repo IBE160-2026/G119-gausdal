@@ -162,3 +162,28 @@ Spec-filens status er `done`; `sprint-status.yaml` har story-nøkkelen på `revi
   produksjonshemmeligheter ved publisering) — ingen av dem blokkerer Story 1.3.
 
 Speiles i `issues.md`.
+
+## 2026-11-25 kl. 19:50 — Anneli Gausdal
+
+### Oppgave
+
+Anneli bekrefter selv i en ekte nettleser at Story 1.3 fungerer, og ber om at punktene krysses
+av og historien settes til `done`.
+
+### Plan
+
+- Ingen — rent bekreftelses- og statusoppdateringssteg, ingen kodeendring.
+
+### Resultat
+
+Anneli testet `/opprett-konto` og `/logg-inn` selv i nettleseren og bekreftet at skjemaene,
+feltfeilene og navigasjonen til `/oppsett` fungerer. De gjenstående manuelle sjekkene fra
+forrige seksjon er dermed utført. `1-3-opprette-konto-og-logge-inn-og-ut` er satt til `done` i
+`sprint-status.yaml` (commit `c080956`, AD-12). Story 1.3 er nå fullstendig `done`.
+
+### Åpne punkter
+
+- Uendret: `<NedreNavigasjon />`-relaterte og fremtidige punkter dekket i tidligere seksjoner/
+  `deferred-work.md` gjelder fortsatt (ikke blokkerende for Story 1.3).
+
+Speiles i `issues.md`.

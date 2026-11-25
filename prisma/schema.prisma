@@ -1,12 +1,78 @@
 // AD-3: PostgreSQL med Prisma. Datamodellen eies av denne filen og endres
-// bare via migreringer. Ingen domenemodeller legges til i Story 1.1 — det er
-// Better Auth (Story 1.3) og senere historier som eier tabellene sine.
+// bare via migreringer. User/Session/Account/Verification er generert av
+// `npx auth@1.7.28 generate` mot src/app/auth.ts (Better Auth, Story 1.3) —
+// ikke håndskrevet. Kjør samme kommando på nytt hvis auth.ts endres.
+// Senere historiers domenetabeller legges til i egne migreringer.
 
 generator client {
   provider = "prisma-client-js"
 }
 
 // Prisma 7: tilkoblingsstrengen leses i prisma.config.ts, ikke her.
+
 datasource db {
   provider = "postgresql"
+}
+
+model User {
+  id            String    @id
+  name          String
+  email         String
+  emailVerified Boolean   @default(false)
+  image         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  sessions      Session[]
+  accounts      Account[]
+
+  @@unique([email])
+  @@map("user")
+}
+
+model Session {
+  id        String   @id
+  expiresAt DateTime
+  token     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([token])
+  @@index([userId])
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  @@index([userId])
+  @@map("account")
+}
+
+model Verification {
+  id         String   @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([identifier])
+  @@map("verification")
 }

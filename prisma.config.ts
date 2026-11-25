@@ -8,6 +8,10 @@ export default defineConfig({
   schema: 'prisma/schema.prisma',
   migrations: {
     path: 'prisma/migrations',
+    // Story 1.3: Prisma 7-mønster for seed-kommando (ikke
+    // package.json#prisma.seed, det er Prisma 5/6). Krever tsx som
+    // devDependency siden prisma/seed.ts er TypeScript.
+    seed: 'tsx prisma/seed.ts',
   },
   datasource: {
     url: env('DATABASE_URL'),

@@ -1,0 +1,4 @@
+-- AR-3 / AD-11: Bevisst tom migrering. Story 1.1 har ingen domenemodeller —
+-- den finnes for å bekrefte at `prisma migrate deploy` kjører fra første
+-- commit. Better Auth (Story 1.3) legger til de første ekte tabellene i en
+-- ny migrering.

@@ -1,0 +1,12 @@
+// AD-3: PostgreSQL med Prisma. Datamodellen eies av denne filen og endres
+// bare via migreringer. Ingen domenemodeller legges til i Story 1.1 — det er
+// Better Auth (Story 1.3) og senere historier som eier tabellene sine.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// Prisma 7: tilkoblingsstrengen leses i prisma.config.ts, ikke her.
+datasource db {
+  provider = "postgresql"
+}

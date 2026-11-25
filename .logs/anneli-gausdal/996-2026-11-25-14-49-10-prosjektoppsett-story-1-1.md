@@ -153,3 +153,37 @@ compose up` faktisk kjøres, se Åpne punkter).
   triage-loggen som lav prioritet.
 
 Speiles i `issues.md`.
+
+## 2026-11-25 kl. 15:30 — Anneli Gausdal
+
+### Oppgave
+Kjøre `docker compose up --build` live (Docker-daemonen ble tilgjengelig i miljøet) for å
+bekrefte det siste, uverifiserte akseptkriteriet fra forrige økter.
+
+### Plan
+- Bygge og starte med `docker compose up --build -d`, uten å åpne nettleser.
+- Lese container-status og logger; bekrefte med `curl` at Hjem svarer på port 3000.
+- Finner feil: diagnostisere årsak, rette minimalt, bygge/starte på nytt, bekrefte.
+
+### Resultat
+Første kjøring feilet: `db`-containeren (`postgres:19.0-alpine`) gikk i en restart-loop.
+Årsak: Postgres 18+ sine offisielle Docker-images krever at datamappen monteres på
+`/var/lib/postgresql` (ikke den gamle `/var/lib/postgresql/data`) —
+https://github.com/docker-library/postgres/issues/37. `docker-compose.yml` brukte den gamle
+stien. Ingen av de tre kode-reviewerne i forrige økt fanget dette, siden ingen av dem kjørte
+Docker live — det var nettopp den uverifiserte biten.
+
+Fikset `docker-compose.yml` (`db-data:/var/lib/postgresql`), kjørte `docker compose down -v`
+for å fjerne de krasjede containerne/volumene, og startet på nytt. Da ble `db` `healthy`,
+migreringen `20261125000000_init` ble anvendt automatisk av `app`-containeren, og
+`curl http://localhost:3000` ga `HTTP 200` med Hjem-siden. Alle fire akseptkriteriene i
+spec-en er nå bekreftet oppfylt.
+
+**Commits:** `6c80176` (fiks, AR-11/AD-11), `7413682` (spec/sprint-status → `done`, AD-12).
+`sprint-status.yaml` har nå story-nøkkelen på `done`. Stacken kjører fortsatt lokalt
+(`g119-gausdal-app-1`, `g119-gausdal-db-1`) — stopp med `docker compose down` når du er ferdig
+å teste; data ligger i Docker-volumer og overlever en vanlig `down` (uten `-v`).
+
+### Åpne punkter
+Ingen igjen fra Story 1.1 — begge punktene fra forrige økt (`docker compose up` live og
+migreringen) er løst og lukket i `issues.md`.

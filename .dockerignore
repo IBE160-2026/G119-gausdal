@@ -1,0 +1,17 @@
+node_modules
+.next
+out
+build
+.git
+tests
+.env
+.env.*
+!.env.example
+*.log
+_bmad
+_bmad-output
+.docs
+docs
+.logs
+.claude
+coverage

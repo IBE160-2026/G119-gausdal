@@ -21,3 +21,19 @@
 - source_spec: `_bmad-output/implementation-artifacts/spec-1-3-opprette-konto-og-logge-inn-og-ut.md`
   summary: Vurder produksjonshåndtering av hemmeligheter (f.eks. `BETTER_AUTH_SECRET`) når publisering planlegges — i dag deler den samme "lokal standardverdi i docker-compose.yml"-mønsteret som `POSTGRES_PASSWORD`, uten varsel hvis standardverdien brukes i en produksjonslignende utrulling.
   evidence: Følger et allerede godkjent mønster fra Story 1.1 (AD-10), men produksjonshemmeligheter er eksplisitt utsatt arkitektur-bredt til publiseringsfasen ("avgjøres når kjernen kjører lokalt"). Funnet av blind-hunter.
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-1-4-velge-kort-trumf-og-type-bonusreiser.md`
+  summary: Håndter samtidige/doble innsendinger av oppsett-skjemaet (dobbeltklikk, to faner/enheter) — i dag kan et kappløp mellom to `lagreOppsett`-kall for samme bruker gi et overraskende sluttresultat siden `BrukerKort` erstattes, ikke slås sammen.
+  evidence: Reelt, men lav sannsynlighet (én bruker, ett oppsett, rett etter registrering) og ingen kryss-bruker-risiko (transaksjonen er alltid filtrert på egen `brukerId`). Optimistisk låsing er ikke krevd av noe AD/AC. Funnet uavhengig av tre reviewere (blind-hunter, edge-case-hunter, verification-gap).
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-1-4-velge-kort-trumf-og-type-bonusreiser.md`
+  summary: Automatisert testdekning for `lagreOppsett()`s feltvalidering og "erstatt ikke slå sammen"-transaksjonen, og for at `oppsett/page.tsx` kobler `trumfKoblet`/`kunSas` til riktig prop (ikke byttet om) ved forhåndsutfylling.
+  evidence: Reelt, men krever database-mocking (`db.$transaction`/`db.kort`/`db.brukerKort`) tilsvarende `krevSesjon()`-testens mønster, som ikke er etablert for skrivetransaksjoner i prosjektet ennå. Verifisert manuelt i stedet (frittstående script + `curl` mot serialiserte props). Funnet av verification-gap-reviewer.
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-1-4-velge-kort-trumf-og-type-bonusreiser.md`
+  summary: Eksplisitte kjøretids-typesjekker (`typeof`/`Array.isArray`) i `lagreOppsett()` for `trumfKoblet`/`kortKoder`, i tilfelle et håndlaget (ikke-UI) kall til server-handlingen med feil typer.
+  evidence: Delvis adressert av den nye ytre try/catch-en (en feil type gir nå `{ ok: false }` i stedet for å krasje), men selve feltspesifikke feilmeldingen for akkurat dette tilfellet er lav prioritet — Server Actions er ikke behandlet som en hardnet offentlig API-grense noe annet sted i kodebasen. Funnet av edge-case-hunter.
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-1-4-velge-kort-trumf-og-type-bonusreiser.md`
+  summary: Re-sjekk at `better-auth`s Prisma-generator fortsatt bevarer de håndlagte back-relation-feltene (`brukerKort`, `brukerProfil`) på `User` hvis/når `npx auth generate` kjøres på nytt (f.eks. når `auth.ts` endres i en senere historie).
+  evidence: I dag bekreftet trygt for `better-auth@1.7.28` mot PR better-auth/better-auth#12896 (se `schema.prisma`s kommentar og spec-1-4 Boundaries), men ingen automatisert sjekk fanger opp om en fremtidig versjon endrer denne oppførselen. Funnet av blind-hunter.

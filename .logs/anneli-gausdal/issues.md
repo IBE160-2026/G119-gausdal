@@ -20,7 +20,7 @@
 - [x] 2026-11-24 [arkitektur](998-2026-11-24-12-42-35-arkitektur.md) — bmad-create-epics-and-stories og bmad-sprint-planning (kjerne ferdig 4.–5. des) (epics løst 2026-11-24, sprintplan under)
 - [x] 2026-11-24 [arkitektur](998-2026-11-24-12-42-35-arkitektur.md) — godkjenne/endre AD-5, AD-6 og AD-12 (løst 2026-11-24, godkjent)
 - [ ] 2026-11-24 [arkitektur](998-2026-11-24-12-42-35-arkitektur.md) — opprette OpenRouter-konto og nøkkel (kun lokal .env, først når fritekst bygges)
-- [ ] 2026-11-24 [arkitektur](998-2026-11-24-12-42-35-arkitektur.md) — pinne eksakte versjoner (Next.js, Prisma, Better Auth, PostgreSQL) ved oppsett
+- [x] 2026-11-24 [arkitektur](998-2026-11-24-12-42-35-arkitektur.md) — pinne eksakte versjoner (Next.js, Prisma, Better Auth, PostgreSQL) ved oppsett (løst 2026-11-25 i [prosjektoppsett-story-1-1](996-2026-11-25-14-49-10-prosjektoppsett-story-1-1.md))
 - [ ] 2026-11-24 [arkitektur](998-2026-11-24-12-42-35-arkitektur.md) — bekrefte Docker-krav for sensor med faglærer
 - [ ] 2026-11-24 [arkitektur](998-2026-11-24-12-42-35-arkitektur.md) — flytte løse rotfiler (product-brief.md, tilbakemelding-product-brief.md) til docs/ før innlevering
 - [x] 2026-11-24 [epics-og-historier](997-2026-11-24-13-05-05-epics-og-historier.md) — kjøre bmad-create-epics-and-stories (løst 2026-11-24)
@@ -28,4 +28,7 @@
 - [ ] 2026-11-24 [epics-og-historier](997-2026-11-24-13-05-05-epics-og-historier.md) — Anneli: se over testtabellen (15 kjøp) i docs/vedlegg-satser.md; satsene er fortsatt [VERIFISER]
 - [ ] 2026-11-24 [epics-og-historier](997-2026-11-24-13-05-05-epics-og-historier.md) — samle minst tre eksempler på rettet KI-kode underveis (Story 5.4)
 - [ ] 2026-11-24 [epics-og-historier](997-2026-11-24-13-05-05-epics-og-historier.md) — avgjøre om Story 7.5 (avveining mellom kort) utsettes til Senere
-- [ ] 2026-11-24 [epics-og-historier](997-2026-11-24-13-05-05-epics-og-historier.md) — starte bygging i nytt vindu: bmad-build med Story 1.1 (Epic 1–4 først)
+- [x] 2026-11-24 [epics-og-historier](997-2026-11-24-13-05-05-epics-og-historier.md) — starte bygging i nytt vindu: bmad-build med Story 1.1 (Epic 1–4 først) (Story 1.1 implementert 2026-11-25, se [prosjektoppsett-story-1-1](996-2026-11-25-14-49-10-prosjektoppsett-story-1-1.md); verifisering av `docker compose up` gjenstår)
+
+- [ ] 2026-11-25 [prosjektoppsett-story-1-1](996-2026-11-25-14-49-10-prosjektoppsett-story-1-1.md) — kjøre `docker compose up` live på en maskin med Docker daemon for å bekrefte at Postgres, migrering og appen faktisk starter sammen (ikke mulig i sandbox uten daemon)
+- [ ] 2026-11-25 [prosjektoppsett-story-1-1](996-2026-11-25-14-49-10-prosjektoppsett-story-1-1.md) — bekrefte at håndskrevet tom migrering (`prisma/migrations/20261125000000_init/migration.sql`) faktisk kan anvendes av `prisma migrate deploy` mot en levende database

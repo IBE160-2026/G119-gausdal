@@ -87,6 +87,17 @@ sårbarheter etter dette.
 live (Postgres + migrering + app i container) — Docker Desktop-daemonen var ikke tilgjengelig
 i dette miljøet. Må kjøres manuelt før historien godkjennes.
 
+**`docker compose up --build` kjørt live (2026-11-25) — én reell feil funnet og rettet:**
+`db`-containeren krasjet i en restart-loop ved første oppstart. `postgres:19.0-alpine`
+(Postgres 18+) krever at datamappen monteres på `/var/lib/postgresql` (ikke
+`/var/lib/postgresql/data` som tidligere versjoner brukte) — se
+https://github.com/docker-library/postgres/issues/37. `docker-compose.yml` brukte den gamle
+stien. Fikset til `db-data:/var/lib/postgresql`. Etter fiks: `db` ble `healthy`, migreringen
+`20261125000000_init` ble anvendt automatisk, `app` startet, og `curl http://localhost:3000`
+ga `HTTP 200` med Hjem-siden ("Prosjektet er satt opp og kjører."). Ingen av de tre
+kode-reviewerne fanget dette, siden ingen av dem kunne kjøre Docker. Alle fire
+akseptkriteriene er nå bekreftet oppfylt.
+
 ## Spec Change Log
 
 ## Review Triage Log

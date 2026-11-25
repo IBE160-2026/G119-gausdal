@@ -106,3 +106,24 @@ triage-logg, sprint-status, AD-12).
   innloggings-/onboardingruter.
 
 Speiles i `issues.md`.
+
+## 2026-11-25 kl. 18:35 — Anneli Gausdal
+
+### Oppgave
+Anneli bekrefter selv i en ekte nettleser at Story 1.2 fungerer, og ber om at punktet krysses
+av og historien settes til `done`.
+
+### Plan
+- Ingen — rent bekreftelses- og statusoppdateringssteg, ingen kodeendring.
+
+### Resultat
+Anneli testet appen selv og bekreftet: fanelinjen virker, mørk modus virker, stor tekst virker,
+og fanelinjen dekker ikke innhold. De gjenstående manuelle sjekkene fra forrige seksjon er
+dermed utført. `1-2-tema-og-navigasjonsskall` er satt til `done` i `sprint-status.yaml`
+(commit `a93d96f`, AD-12). Story 1.2 er nå fullstendig `done`.
+
+### Åpne punkter
+- Uendret: `<NedreNavigasjon />` må bli betinget når Story 1.3–1.5 får egne
+  innloggings-/onboardingruter (se tidligere seksjoner).
+
+Speiles i `issues.md`.

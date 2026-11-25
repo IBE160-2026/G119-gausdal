@@ -1,7 +1,7 @@
-export default function MegSide() {
+export default function KjopSide() {
   return (
     <main>
-      <h1>Meg</h1>
+      <h1>Kjøp</h1>
       <p>Kommer snart.</p>
     </main>
   );

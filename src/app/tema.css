@@ -111,6 +111,12 @@ h1 {
   max-width: 480px;
   margin-inline: auto;
   padding-inline: var(--spacing-margin-mobile);
+}
+
+/* Story 1.3: bunnpadding for sider MED fanelinje — brukes bare av
+   (app)/layout.tsx, se src/app/(app)/layout.tsx. Oppsett og
+   innloggingssidene har ingen fanelinje og trenger ikke denne paddingen. */
+.skall-innhold--med-navigasjon {
   /* Nok plass til at den faste nedre fanelinjen ikke dekker siste tekst. */
   padding-bottom: calc(
     var(--nedre-navigasjon-hoyde) + var(--spacing-5) + env(safe-area-inset-bottom, 0px)

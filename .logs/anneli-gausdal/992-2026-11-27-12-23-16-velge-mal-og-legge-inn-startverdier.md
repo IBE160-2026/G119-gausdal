@@ -84,3 +84,37 @@ FR-2/FR-3/FR-4/UX-DR13), `3b83994` (redirect-kobling + sikkerhetshull tettet, FR
   — ingen av dem blokkerer Story 1.5.
 
 Speiles i `issues.md`.
+
+## 2026-11-27 kl. 12:35 — Anneli Gausdal
+
+### Oppgave
+Anneli testet `/oppsett/mal` i nettleseren og fant at "Bonuspoeng siste 12 måneder" var
+uklar og så ut som en duplikat av "Bonuspoeng i dag". Ba om: ny etikett ("Poeng opptjent
+siste 12 måneder"), hjelpetekst under begge feltene, og at det andre feltet bare vises når
+Fly Premium er valgt.
+
+### Plan
+- Direkte, presis endring (ikke full `bmad-build`-runde) siden instruksene var eksplisitte.
+- `mal-form.tsx`: ny etikett, hjelpetekst under begge felt (koblet med `aria-describedby`
+  sammen med feilmeldingen når den finnes), feltet for "siste 12 måneder" pakket inn i
+  `{harFlyPremium && (...)}`.
+- `handlinger.ts`: feltet er nå bare påkrevd (og validert) når `input.harFlyPremium` er sann
+  — lagres som `null` ellers (feltet var allerede nullable i databasen, ingen migrering
+  nødvendig).
+- Oppdaterte spec-filens AC/Boundaries og la til en Spec Change Log-oppføring (siden dette
+  endrer et frosset akseptkriterium — brukerens eget, direkte ønske etter manuell testing).
+
+### Resultat
+`npm run lint`/`test`/`build` grønt (27/27 tester, uendret — ingen eksisterende test dekket
+denne logikken, og ingen ny test ble bedt om utover det). Verifisert i Docker mot ekte
+database: feltet er skjult og "Bonuspoeng i dag" har riktig hjelpetekst når
+`harFlyPremium: false`; feltet vises med ny etikett og hjelpetekst når `harFlyPremium: true`.
+
+**Commit:** `d149403` (FR-4, FR-20, UX-DR14), pushet til `claude/eager-carson-eldvjj`
+(`97da969..d149403`).
+
+### Åpne punkter
+Uendret fra forrige seksjon — manuell nettleser-bekreftelse og `sprint-status.yaml` → `done`
+gjenstår fortsatt for hele Story 1.5.
+
+Speiles i `issues.md`.

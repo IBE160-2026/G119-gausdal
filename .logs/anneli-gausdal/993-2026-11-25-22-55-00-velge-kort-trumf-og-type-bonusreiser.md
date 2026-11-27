@@ -53,3 +53,58 @@ Prisma-transaksjon, med nye `Kort`/`BrukerKort`/`BrukerProfil`-tabeller.
   strukturelt (markup/CSS) og via `curl`/et frittstående script mot den ekte databasen.
 - Spec-ens egne manuelle sjekker (prøv å lagre uten kort og se feilen; lagre og last siden på
   nytt og se forhåndsutfylling) er ikke gjort i nettleser.
+
+## 2026-11-25 kl. 23:20 — Anneli Gausdal
+
+### Oppgave
+Fullføre resten av `bmad-build` for Story 1.4: tre parallelle kodegjennomganger av diffen,
+triage av funnene, retting, re-verifisering, og landing i små commits med AR-/AD-/UX-DR-ID.
+
+### Plan
+- Kjørte `blind-hunter`, `edge-case-hunter` og `verification-gap` parallelt mot diffen siden
+  baseline-commiten (ae87365).
+- Vurderte alle 15 unike funn selv (noen overlappet mellom reviewerne) — bekreftet flere
+  påstander direkte mot koden (ingen `kort.delete`-kall finnes noe sted; `router.push`+
+  `router.refresh()` matcher Story 1.3s etablerte mønster i `meg/page.tsx`; "ikke sett i
+  nettleser"-punktet var allerede i `issues.md`) i stedet for å ta reviewernes ord for det.
+- Sendte de 4 rettbare funnene tilbake til samme implementeringsagent (gjenengasjert via id);
+  verifiserte rettingen på nytt selv, inkludert å lese den patchede koden direkte.
+- Committet i 4 små commits iht. brukerens eksplisitte instruks.
+
+### Resultat
+**Review:** 3 reviewere fant 15 unike enkeltfunn (11 blind-hunter, 7 edge-case-hunter — 2 som
+"claims" — 4 verification-gap, med noe overlapp). Etter egen verifisering: 4 rettet (patch),
+4 utsatt til `deferred-work.md`, 7 avvist som `false`/`by design` med motbevisning i spec-filens
+`## Review Triage Log`.
+
+**Rettet i `handlinger.ts`/`oppsett-form.tsx`, alle verifisert av meg etter retting (lest den
+faktiske patchede koden, kjørt `npm run lint`/`test`/`build` på nytt, og kjørt
+`docker compose up --build` på nytt for å bekrefte innlogging + ekte kortkatalog-rendering):**
+- Feilmeldingene i oppsett-skjemaet fikk `id` + `aria-describedby` på alle felt, og
+  `aria-invalid` på avkrysningsboksene (bevisst utelatt på radioknappene — `eslint`s
+  `jsx-a11y/role-supports-aria-props` tillater det ikke der).
+- `lagreOppsett()` fikk en try/catch rundt database-/transaksjonsarbeidet — returnerer nå
+  `{ ok: false, feil: { generell: '...' } }` på uventede feil i stedet for å kaste.
+- `kortKoder` dedupliseres nå (`[...new Set(...)]`) før validering/oppslag/transaksjon, så en
+  duplikatkode ikke lenger kan treffe `@@unique([brukerId, kortId])` og kaste.
+- Alle avkrysningsbokser/radioknapper i oppsett-skjemaet får nå `disabled={venter}`, ikke bare
+  "Neste"-knappen.
+
+**Commits** (4 stk, i `claude/eager-carson-eldvjj`): `78c3b8c` (Kort/BrukerKort/BrukerProfil +
+seed, AD-3/AR-3), `4cd1fe9` (server-handling + validering, FR-2/FR-5/FR-6/AD-8), `6f53899`
+(oppsett-skjema + fast primærknapp, FR-2/FR-5/FR-6/UX-DR13/UX-DR3), `6449902` (spec/triage/
+sprint-status, AD-12).
+
+`npm run lint`/`test`/`build` grønt etter retting (8/8 tester). Spec-filens status er `done`;
+`sprint-status.yaml` har story-nøkkelen på `review` (ikke `done`) — venter på Annelis egen
+manuelle nettleser-bekreftelse, se forrige seksjons åpne punkter.
+
+### Åpne punkter
+- Uendret fra forrige seksjon: manuell nettleser-bekreftelse av skjema, feilmeldinger og
+  forhåndsutfylling gjenstår.
+- 4 funn utsatt til `deferred-work.md` (samtidige innsendinger; database-mocket testdekning for
+  `lagreOppsett()`/forhåndsutfylling; strengere kjøretids-typesjekker; re-sjekk av
+  Better-Auth-PR-avhengigheten ved en fremtidig `npx auth generate`-kjøring) — ingen av dem
+  blokkerer Story 1.4.
+
+Speiles i `issues.md`.

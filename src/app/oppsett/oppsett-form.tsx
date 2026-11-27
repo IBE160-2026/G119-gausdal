@@ -72,9 +72,9 @@ export default function OppsettForm({
         return;
       }
 
-      // Boundaries: "Neste" etter gyldig lagring sender til Hjem — det
-      // eneste bygde stedet å gå i dag (Story 1.5 flytter dette målet).
-      router.push('/');
+      // Boundaries: "Neste" etter gyldig lagring sender til oppsettets
+      // andre steg (Story 1.5), ikke til Hjem.
+      router.push('/oppsett/mal');
       router.refresh();
     } catch {
       // Uventet feil (f.eks. nettverksfeil) — vis generell feilmelding i

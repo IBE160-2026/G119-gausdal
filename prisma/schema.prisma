@@ -15,13 +15,13 @@ datasource db {
 }
 
 model User {
-  id            String    @id
+  id            String        @id
   name          String
   email         String
-  emailVerified Boolean   @default(false)
+  emailVerified Boolean       @default(false)
   image         String?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
   sessions      Session[]
   accounts      Account[]
   // Story 1.4: håndlagte back-relation-felt. better-auths Prisma-generator
@@ -108,8 +108,10 @@ model BrukerKort {
   @@map("bruker_kort")
 }
 
-// Story 1.4: Trumf/SkyTeam-svarene fra oppsett. Utvides av Story 1.5 med
-// startverdier-feltene (se spec-1-4 Code Map).
+// Story 1.4: Trumf/SkyTeam-svarene fra oppsett. Utvidet av Story 1.5 med
+// mål- og startverdier-feltene (se spec-1-5 Code Map) — alle valgfrie siden
+// raden opprettes i Story 1.4s steg, før disse feltene er kjent, og fylles
+// inn ved en senere `update` (ikke `upsert`) fra /oppsett/mal.
 model BrukerProfil {
   id          String   @id @default(uuid())
   brukerId    String   @unique
@@ -118,6 +120,23 @@ model BrukerProfil {
   kunSas      Boolean
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+
+  // Story 1.5 (FR-3, FR-6): poengmål, valgfritt siden raden kan finnes før
+  // dette steget er fullført. `null` betyr «oppsett ikke fullført» — brukt
+  // av (app)/layout.tsx til å avgjøre redirect.
+  poengmal Int?
+
+  // Story 1.5 (FR-2): bare sanne hvis brukeren faktisk har riktig kort
+  // (Amex Elite / Mastercard Premium) — revalidert server-side ved lagring.
+  harCompanionTicket Boolean @default(false)
+  harFlyPremium      Boolean @default(false)
+
+  // Story 1.5 (FR-4, AR-5): startverdier. Poeng som rene heltall; beløp som
+  // heltall i øre (AD-5-konvensjonen for beløp, gjenbrukt her for inntasting).
+  bonuspoengIDag       Int?
+  bonuspoengSiste12Mnd Int?
+  amexForbrukOre       Int?
+  trumfKronerOre       Int?
 
   @@map("bruker_profil")
 }

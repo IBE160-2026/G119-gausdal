@@ -57,9 +57,15 @@ export async function lagreMal(input: LagreMalInput): Promise<LagreMalResultat> 
     return { ok: false, feil: { bonuspoengIDag: GYLDIG_POENG_FEIL } };
   }
 
-  const bonuspoengSiste12Mnd = parserHeltall(input.bonuspoengSiste12Mnd);
-  if (bonuspoengSiste12Mnd === null || bonuspoengSiste12Mnd < 0) {
-    return { ok: false, feil: { bonuspoengSiste12Mnd: GYLDIG_POENG_FEIL } };
+  // FR-20 / UX-DR14: bare relevant (og bare vist i skjemaet) når Fly Premium
+  // er valgt — lagres som `null` ellers, ikke et tvunget tall ingen bruker
+  // faktisk ser eller mener noe med.
+  let bonuspoengSiste12Mnd: number | null = null;
+  if (input.harFlyPremium) {
+    bonuspoengSiste12Mnd = parserHeltall(input.bonuspoengSiste12Mnd);
+    if (bonuspoengSiste12Mnd === null || bonuspoengSiste12Mnd < 0) {
+      return { ok: false, feil: { bonuspoengSiste12Mnd: GYLDIG_POENG_FEIL } };
+    }
   }
 
   const amexForbrukOre = parserKronerTilOre(input.amexForbruk);

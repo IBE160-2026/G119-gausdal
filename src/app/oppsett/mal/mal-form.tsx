@@ -57,8 +57,10 @@ export default function MalForm({
   const flyPremiumId = useId();
   const flyPremiumFeilId = useId();
   const bonuspoengIDagId = useId();
+  const bonuspoengIDagHjelpId = useId();
   const bonuspoengIDagFeilId = useId();
   const bonuspoengSiste12MndId = useId();
+  const bonuspoengSiste12MndHjelpId = useId();
   const bonuspoengSiste12MndFeilId = useId();
   const amexForbrukId = useId();
   const amexForbrukFeilId = useId();
@@ -193,8 +195,13 @@ export default function MalForm({
           onChange={(event) => setBonuspoengIDagVerdi(event.target.value)}
           disabled={venter}
           aria-invalid={feil.bonuspoengIDag ? true : undefined}
-          aria-describedby={feil.bonuspoengIDag ? bonuspoengIDagFeilId : undefined}
+          aria-describedby={
+            feil.bonuspoengIDag
+              ? `${bonuspoengIDagHjelpId} ${bonuspoengIDagFeilId}`
+              : bonuspoengIDagHjelpId
+          }
         />
+        <p id={bonuspoengIDagHjelpId}>Saldoen du har akkurat nå.</p>
         {feil.bonuspoengIDag && (
           <p id={bonuspoengIDagFeilId} role="alert">
             {feil.bonuspoengIDag}
@@ -202,25 +209,42 @@ export default function MalForm({
         )}
       </div>
 
-      <div>
-        <label htmlFor={bonuspoengSiste12MndId}>Bonuspoeng siste 12 måneder</label>
-        <input
-          id={bonuspoengSiste12MndId}
-          name="bonuspoeng-siste-12-mnd"
-          type="text"
-          inputMode="decimal"
-          value={bonuspoengSiste12MndVerdi}
-          onChange={(event) => setBonuspoengSiste12MndVerdi(event.target.value)}
-          disabled={venter}
-          aria-invalid={feil.bonuspoengSiste12Mnd ? true : undefined}
-          aria-describedby={feil.bonuspoengSiste12Mnd ? bonuspoengSiste12MndFeilId : undefined}
-        />
-        {feil.bonuspoengSiste12Mnd && (
-          <p id={bonuspoengSiste12MndFeilId} role="alert">
-            {feil.bonuspoengSiste12Mnd}
+      {/* FR-20 / UX-DR14: bare relevant for Fly Premium — skjules når målet
+          ikke er valgt, i stedet for å spørre om et tall ingen bruker ser
+          igjen. Feilmeldingen kan ikke dukke opp når feltet er skjult,
+          siden handlinger.ts bare validerer dette feltet når
+          harFlyPremium er sann — derfor trygt å ha den inni samme blokk
+          (ulikt Companion Ticket/Fly Premium-feilene over, som kan komme
+          fra en annen kilde enn avkrysningsboksen selv). */}
+      {harFlyPremium && (
+        <div>
+          <label htmlFor={bonuspoengSiste12MndId}>Poeng opptjent siste 12 måneder</label>
+          <input
+            id={bonuspoengSiste12MndId}
+            name="bonuspoeng-siste-12-mnd"
+            type="text"
+            inputMode="decimal"
+            value={bonuspoengSiste12MndVerdi}
+            onChange={(event) => setBonuspoengSiste12MndVerdi(event.target.value)}
+            disabled={venter}
+            aria-invalid={feil.bonuspoengSiste12Mnd ? true : undefined}
+            aria-describedby={
+              feil.bonuspoengSiste12Mnd
+                ? `${bonuspoengSiste12MndHjelpId} ${bonuspoengSiste12MndFeilId}`
+                : bonuspoengSiste12MndHjelpId
+            }
+          />
+          <p id={bonuspoengSiste12MndHjelpId}>
+            Poeng du har tjent de siste 12 månedene, også de du har brukt. Brukes til Fly
+            Premium.
           </p>
-        )}
-      </div>
+          {feil.bonuspoengSiste12Mnd && (
+            <p id={bonuspoengSiste12MndFeilId} role="alert">
+              {feil.bonuspoengSiste12Mnd}
+            </p>
+          )}
+        </div>
+      )}
 
       <div>
         <label htmlFor={amexForbrukId}>Amex-forbruk hittil i kalenderåret (kr)</label>

@@ -44,8 +44,10 @@ brukeren faktisk har det relevante kortet), og de fire startverdiene. Lagres i `
   av det valget, altså ingen ekstra filtrering i denne historien).
 - Serveren validerer Companion Ticket/Fly Premium-valgene på nytt mot brukerens faktiske
   `BrukerKort` — stoler aldri på at klienten skjulte avkrysningsboksen riktig.
-- Poengmål er et påkrevd positivt heltall (≥1). De fire startverdiene er påkrevde heltall ≥0
-  (aldri negative) — validert server-side, autoritativt (`{ ok: false, feil }`).
+- Poengmål er et påkrevd positivt heltall (≥1). Bonuspoeng i dag, Amex-forbruk og Trumf-kroner
+  er alltid påkrevde heltall ≥0 (aldri negative). "Poeng opptjent siste 12 måneder" er bare
+  påkrevd (og bare vist) når Fly Premium er valgt — se Spec Change Log 2026-11-27. Alt
+  validert server-side, autoritativt (`{ ok: false, feil }`).
 - Bonuspoeng-feltene lagres som rene heltall; Amex-forbruk og Trumf-kroner lagres som heltall
   i øre (FR-4, AR-5). Alle tallfelt bruker `inputMode="decimal"` og godtar komma som
   desimaltegn (UX-DR15) — et beløp med mer enn 2 desimaler rundes ned til nærmeste øre
@@ -168,10 +170,12 @@ brukeren faktisk har det relevante kortet), og de fire startverdiene. Lagres i `
   SkyTeam» — altså uansett hvilken av de to verdiene bonusreisetypen har, siden Story 7.2s
   AC bekrefter at valget der bare endrer forklaringstekst, ikke tilgjengelighet (FR-2, FR-3,
   FR-6).
-- Given jeg er i oppsett, when jeg oppgir bonuspoeng i dag, poeng siste 12 måneder,
-  Amex-forbruk hittil i kalenderåret og Trumf-kroner siden siste overføring, then verdiene
-  lagres som heltall (poeng) og øre (beløp); tallfelt åpner talltastatur med komma, og
-  ugyldige verdier gir en forståelig feil knyttet til feltet (FR-4, AR-5, UX-DR13, UX-DR15).
+- Given jeg er i oppsett, when jeg oppgir bonuspoeng i dag, Amex-forbruk hittil i
+  kalenderåret og Trumf-kroner siden siste overføring, then verdiene lagres som heltall
+  (poeng) og øre (beløp); tallfelt åpner talltastatur med komma, og ugyldige verdier gir en
+  forståelig feil knyttet til feltet (FR-4, AR-5, UX-DR13, UX-DR15). "Poeng opptjent siste
+  12 måneder" vises og spørres bare når Fly Premium er valgt — se Spec Change Log 2026-11-27
+  (FR-20, UX-DR14).
 - Given de nye feltene for mål og startverdier ikke finnes, when historien er ferdig, then de
   er opprettet via Prisma-migrering (AR-3).
 - Given oppsettet er fullført, when jeg trykker Ferdig, then jeg kommer til Hjem.
@@ -277,6 +281,17 @@ omdirigering fortsatt virker.
   sjekkes manuelt i nettleser (se spec-ens Manual checks).
 
 ## Spec Change Log
+
+- **2026-11-27, brukerforespurt (Anneli, direkte, etter manuell nettleser-test):** "Bonuspoeng
+  siste 12 måneder" var uklar og så ut som en duplikat av "Bonuspoeng i dag". Endret til:
+  (1) feltet omdøpt til "Poeng opptjent siste 12 måneder"; (2) hjelpetekst lagt til under
+  begge feltene ("Saldoen du har akkurat nå" / "Poeng du har tjent de siste 12 månedene, også
+  de du har brukt. Brukes til Fly Premium"); (3) feltet vises og er påkrevd bare når Fly
+  Premium er valgt (tidligere alltid påkrevd) — det er nøyaktig det tallet FR-20 beskriver
+  ("Fremgang mot Fly Premium ... oppgitt av bruker"), og ingen AC krever det uavhengig av
+  Fly Premium. Ingen migrering nødvendig — `bonuspoengSiste12Mnd` var allerede nullable.
+  KEEP: resten av skjemaet (poengmål, Companion Ticket/Fly Premium-gating, Amex-forbruk,
+  Trumf-kroner) er uendret og fungerer som før.
 
 ## Review Triage Log
 

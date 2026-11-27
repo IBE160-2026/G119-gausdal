@@ -42,3 +42,6 @@
 
 - [ ] 2026-11-25 [velge-kort-trumf-og-type-bonusreiser](993-2026-11-25-22-55-00-velge-kort-trumf-og-type-bonusreiser.md) — Anneli: åpne `/oppsett` i en ekte nettleser, bekreft avkrysningsbokser/Trumf-/SkyTeam-radioknapper, feilmeldingen ved lagring uten kort, og at valg faktisk forhåndsutfylles ved gjenbesøk
 - [ ] 2026-11-25 [velge-kort-trumf-og-type-bonusreiser](993-2026-11-25-22-55-00-velge-kort-trumf-og-type-bonusreiser.md) — sette `1-4-velge-kort-trumf-og-type-bonusreiser` til `done` i `sprint-status.yaml` når Anneli har bekreftet manuelt i nettleser (review-runden er ferdig, spec-filens status er allerede `done`)
+
+- [ ] 2026-11-27 [velge-mal-og-legge-inn-startverdier](992-2026-11-27-12-23-16-velge-mal-og-legge-inn-startverdier.md) — Anneli: åpne `/oppsett/mal` i en ekte nettleser, bekreft feilmelding uten poengmål, at "Ferdig" sender til Hjem, og at forhåndsutfylling virker ved gjenbesøk
+- [ ] 2026-11-27 [velge-mal-og-legge-inn-startverdier](992-2026-11-27-12-23-16-velge-mal-og-legge-inn-startverdier.md) — sette `1-5-velge-mål-og-legge-inn-startverdier` til `done` i `sprint-status.yaml` når Anneli har bekreftet manuelt i nettleser (spec-filens status er allerede `done`)

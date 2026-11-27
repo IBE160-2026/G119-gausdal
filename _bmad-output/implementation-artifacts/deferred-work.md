@@ -37,3 +37,7 @@
 - source_spec: `_bmad-output/implementation-artifacts/spec-1-4-velge-kort-trumf-og-type-bonusreiser.md`
   summary: Re-sjekk at `better-auth`s Prisma-generator fortsatt bevarer de håndlagte back-relation-feltene (`brukerKort`, `brukerProfil`) på `User` hvis/når `npx auth generate` kjøres på nytt (f.eks. når `auth.ts` endres i en senere historie).
   evidence: I dag bekreftet trygt for `better-auth@1.7.28` mot PR better-auth/better-auth#12896 (se `schema.prisma`s kommentar og spec-1-4 Boundaries), men ingen automatisert sjekk fanger opp om en fremtidig versjon endrer denne oppførselen. Funnet av blind-hunter.
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-1-5-velge-mal-og-legge-inn-startverdier.md`
+  summary: Trekk ut en delt hjelpefunksjon for "slå opp BrukerKort, bygg et kortKoder-sett"-logikken som i dag er nær-duplisert i `src/app/oppsett/mal/page.tsx` (visningsgating) og `src/app/oppsett/mal/handlinger.ts` (sikkerhets-revalidering).
+  evidence: Reelt, men de to stedene tjener ulike formål (visning vs. autoritativ server-sjekk) og duplikasjonen er bare 3 linjer — en beskjeden, ikke-blokkerende forbedring. Funnet av blind-hunter.
